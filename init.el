@@ -9,7 +9,7 @@
     ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" default)))
  '(package-selected-packages
    (quote
-    (diminish smart-mode-line slime-company company projectile helm magit color-theme-sanityinc-tomorrow slime))))
+    (rg rust-mode diminish smart-mode-line slime-company company projectile helm magit color-theme-sanityinc-tomorrow slime))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -58,6 +58,15 @@
 (setq inhibit-startup-screen t)
 (global-hl-line-mode 1)
 
+(defun cla/switch-to-other-buffer ()
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer))))
+
+(defun cla/revert-buffer-no-confirm ()
+  "Revert buffer without confirmation"
+  (interactive)
+  (revert-buffer t t))
+
 ;; Set window keys
 (global-set-key (kbd "S-M-<up>") 'enlarge-window)
 (global-set-key (kbd "S-M-<down>") 'shrink-window)
@@ -70,6 +79,10 @@
 (global-set-key (kbd "<triple-wheel-right>") 'previous-buffer)
 (global-set-key (kbd "<triple-wheel-left>") 'next-buffer)
 (global-set-key (kbd "H-<tab>") 'other-frame)
+
+;; Hotkeys ftw
+(global-set-key (kbd "<f5>") 'revert-buffer)
+(global-set-key (kbd "C-<f5>") 'cla/revert-buffer-no-confirm)
 
 (defun cla/back-to-indentation-or-beginning ()
   (interactive)
@@ -94,6 +107,12 @@
 (global-set-key (kbd "H-f 2") 'cla-set-large-font)
 
 (cla-set-default-font)
+
+;; ~~~~~~~~~~~~~~~~~~~
+;; magit - git with a vengeance
+;; ~~~~~~~~~~~~~~~~~~~
+
+(cla/install-from-elpa 'magit)
 
 ;; ~~~~~~~~~~~~~~~~~~~
 ;; company-mode
