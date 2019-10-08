@@ -38,6 +38,14 @@
 ;; General Setup
 ;; ~~~~~~~~~~~~~~~
 
+;; Sane Code Mode
+(setq-default indent-tabs-mode nil) ; never insert tabs
+(setq-default tab-width 4)          ; always indent 4 spaces
+(setq-default c-basic-offset 4)     ; c-mode indent 4 spaces
+(add-hook 'before-save-hook         ; on save remove trailing whitespace
+          'delete-trailing-whitespace)
+
+
 (setq visible-bell nil
       ring-bell-function 'flash-mode-line)
 (defun flash-mode-line ()
