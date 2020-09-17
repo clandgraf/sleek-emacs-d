@@ -4,12 +4,14 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#2d2d2d" "#f2777a" "#99cc99" "#ffcc66" "#6699cc" "#cc99cc" "#6699cc" "#d3d0c8"])
+ '(ansi-term-color-vector
+   [unspecified "#2d2d2d" "#f2777a" "#99cc99" "#ffcc66" "#6699cc" "#cc99cc" "#6699cc" "#d3d0c8"])
  '(custom-safe-themes
-   (quote
-    ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" default)))
+   '("24714e2cb4a9d6ec1335de295966906474fdb668429549416ed8636196cb1441" "f2c35f8562f6a1e5b3f4c543d5ff8f24100fae1da29aeb1864bbc17758f52b70" "5846b39f2171d620c45ee31409350c1ccaddebd3f88ac19894ae15db9ef23035" "c968804189e0fc963c641f5c9ad64bca431d41af2fb7e1d01a2a6666376f819c" "8c1dd3d6fdfb2bee6b8f05d13d167f200befe1712d0abfdc47bb6d3b706c3434" "b8929cff63ffc759e436b0f0575d15a8ad7658932f4b2c99415f3dde09b32e97" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "9be1d34d961a40d94ef94d0d08a364c3d27201f3c98c9d38e36f10588469ea57" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" default))
  '(package-selected-packages
-   (quote
-    (rg rust-mode diminish smart-mode-line slime-company company projectile helm magit color-theme-sanityinc-tomorrow slime))))
+   '(diff-hl dracula-theme zenburn-theme monokai-pro-theme color-theme-sanityinc-solarized js2-mode processing-mode processing-snippets json-mode htmlize markdown-mode web-mode base16-theme rg rust-mode diminish smart-mode-line slime-company company projectile helm magit color-theme-sanityinc-tomorrow slime)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -17,104 +19,23 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; ~~~~~~~~~~~~~~~~~~
-;; package.el
-;; ~~~~~~~~~~~~~~~~~~
+(org-babel-load-file "~/.emacs.d/config.org")
 
-(package-initialize)
-(add-to-list 'package-archives
-	     '("melpa" . "http://melpa.org/packages/") t)
-(package-refresh-contents)
+;; markdown-mode
 
-(defun cla/install-from-elpa (package)
-  (unless (package-installed-p package)
-    (package-install package)))
-
-(defun cla/install-from-url (url path)
-  (unless (file-exists-p path)
-    (url-copy-file url path)))
-
-;; ~~~~~~~~~~~~~~~
-;; General Setup
-;; ~~~~~~~~~~~~~~~
-
-;; Sane Code Mode
-(setq-default indent-tabs-mode nil) ; never insert tabs
-(setq-default tab-width 4)          ; always indent 4 spaces
-(setq-default c-basic-offset 4)     ; c-mode indent 4 spaces
-(add-hook 'before-save-hook         ; on save remove trailing whitespace
-          'delete-trailing-whitespace)
+(cla/install-from-elpa 'markdown-mode)
 
 
-(setq visible-bell nil
-      ring-bell-function 'flash-mode-line)
-(defun flash-mode-line ()
-  (invert-face 'mode-line)
-  (run-with-timer 0.1 nil #'invert-face 'mode-line))
+;; ~~~~~~~~~~~~~~~~~~~
+;; processing
+;; ~~~~~~~~~~~~~~~~~~~
 
-(setq make-backup-files nil) ; stop creating backup~ files
-(setq auto-save-default nil) ; stop creating #autosave# files
-
-(add-hook 'before-save-hook         ; on save remove trailing whitespace
-          'delete-trailing-whitespace)
-
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(menu-bar-mode 0)
-(windmove-default-keybindings 'meta)
-(global-set-key (kbd "M-SPC") 'set-mark-command)
-(setq inhibit-startup-screen t)
-(global-hl-line-mode 1)
-
-(defun cla/switch-to-other-buffer ()
-  (interactive)
-  (switch-to-buffer (other-buffer (current-buffer))))
-
-(defun cla/revert-buffer-no-confirm ()
-  "Revert buffer without confirmation"
-  (interactive)
-  (revert-buffer t t))
-
-;; Set window keys
-(global-set-key (kbd "S-M-<up>") 'enlarge-window)
-(global-set-key (kbd "S-M-<down>") 'shrink-window)
-(global-set-key (kbd "S-M-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "S-M-<right>") 'enlarge-window-horizontally)
-;;(global-set-key (kbd "<mouse-4>") 'cla/switch-to-other-buffer)
-(global-set-key (kbd "C-<tab>") 'cla/switch-to-other-buffer)
-(global-set-key (kbd "H-<left>") 'previous-buffer)
-(global-set-key (kbd "H-<right>") 'next-buffer)
-(global-set-key (kbd "<triple-wheel-right>") 'previous-buffer)
-(global-set-key (kbd "<triple-wheel-left>") 'next-buffer)
-(global-set-key (kbd "H-<tab>") 'other-frame)
-
-;; Hotkeys ftw
-(global-set-key (kbd "<f5>") 'revert-buffer)
-(global-set-key (kbd "C-<f5>") 'cla/revert-buffer-no-confirm)
-
-(defun cla/back-to-indentation-or-beginning ()
-  (interactive)
-  (if (= (point) (progn (back-to-indentation) (point)))
-      (beginning-of-line)))
-
-(global-set-key (kbd "C-a") 'cla/back-to-indentation-or-beginning)
-(global-set-key (kbd "<home>") 'cla/back-to-indentation-or-beginning)
-
-(defvar cla-custom-font-height 100)
-(defun cla-set-default-font ()
-  (interactive)
-  (set-face-attribute 'default nil
-                      :family "Source Code Pro" :height cla-custom-font-height))
-(global-set-key (kbd "H-f 1") 'cla-set-default-font)
-
-(defvar cla-custom-large-font-height 110)
-(defun cla-set-large-font ()
-  (interactive)
-  (set-face-attribute 'default nil
-                      :family "Source Code Pro" :height cla-custom-large-font-height))
-(global-set-key (kbd "H-f 2") 'cla-set-large-font)
-
-(cla-set-default-font)
+(setq processing-location
+      "c:/Users/chris/processing-3.5.3/processing-java.exe")
+(setq processing-application-dir
+      "c:/Users/chris/processing-3.5.3")
+(setq processing-sketchbook-dir
+      "c:/Users/chris/Documents/Processing")
 
 ;; ~~~~~~~~~~~~~~~~~~~
 ;; magit - git with a vengeance
@@ -167,6 +88,13 @@
   (define-key helm-find-files-map "\t" 'helm-execute-persistent-action)
   (define-key helm-read-file-map "\t" 'helm-execute-persistent-action))
 
+;; ~~~~~~~~~~~~~~~~~~
+;; diff-hl
+;; ~~~~~~~~~~~~~~~~~~
+
+(cla/install-from-elpa 'diff-hl)
+(global-diff-hl-mode)
+
 ;; ~~~~~~~~~
 ;; Diminish
 ;; ~~~~~~~~~
@@ -174,6 +102,7 @@
 (cla/install-from-elpa 'diminish)
 (add-hook 'after-init-hook (lambda ()
                              (diminish 'company-mode)
+                             (diminish 'global-company-mode)
                              (diminish 'helm-mode)
                              (diminish 'smartparens-mode)))
 
@@ -188,5 +117,5 @@
 ;; ~~~~~~~~~~~~~~~~~~~
 
 (put 'dired-find-alternate-file 'disabled nil)
-(cla/install-from-elpa 'color-theme-sanityinc-tomorrow)
-(load-theme 'sanityinc-tomorrow-eighties)
+(cla/install-from-elpa 'dracula-theme)
+(load-theme 'dracula)

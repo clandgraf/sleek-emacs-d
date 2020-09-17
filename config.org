@@ -1,0 +1,148 @@
+#+TITLE: Emacs Configuration
+#+OPTIONS: toc:nil
+
+* Setup package.el
+
+#+BEGIN_SRC emacs-lisp
+(package-initialize)
+(add-to-list 'package-archives
+  '("melpa" . "http://melpa.org/packages/") t)
+(package-refresh-contents)
+
+(defun cla/install-from-elpa (package)
+  (unless (package-installed-p package)
+    (package-install package)))
+#+END_SRC
+
+* General setup
+
+Highlights the line on which the point is
+
+#+BEGIN_SRC emacs-lisp
+(global-hl-line-mode 1)
+#+END_SRC
+
+** Sane Code Formatting
+
+#+BEGIN_SRC emacs-lisp
+(setq-default indent-tabs-mode nil) ; never insert tabs
+(setq-default tab-width 4)          ; always indent 4 spaces
+(setq-default c-basic-offset 4)     ; c-mode indent 4 spaces
+(add-hook 'before-save-hook         ; on save remove trailing whitespace
+          'delete-trailing-whitespace)
+#+END_SRC
+
+** Visual Bell
+
+#+BEGIN_SRC emacs-lisp
+(setq visible-bell nil
+      ring-bell-function 'flash-mode-line)
+(defun flash-mode-line ()
+  (invert-face 'mode-line)
+  (run-with-timer 0.1 nil #'invert-face 'mode-line))
+#+END_SRC
+
+** Clean Directories
+
+Disable emacs to auto-create files when editing
+
+#+BEGIN_SRC emacs-lisp
+(setq make-backup-files nil) ; stop creating backup~ files
+(setq auto-save-default nil) ; stop creating #autosave# files
+#+END_SRC
+
+** Clean UI
+
+Remove all those noobish frame decorations
+
+#+BEGIN_SRC emacs-lisp
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode 0)
+(windmove-default-keybindings 'meta)
+(global-set-key (kbd "M-SPC") 'set-mark-command)
+(setq inhibit-startup-screen t)
+(global-hl-line-mode 1)
+#+END_SRC
+
+** Keychords
+
+cla/switch-to-other-buffer is useful when editing two files
+in one buffer, for example source/header file.
+
+#+BEGIN_SRC emacs-lisp
+(defun cla/switch-to-other-buffer ()
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer))))
+
+(global-set-key (kbd "C-<tab>") 'cla/switch-to-other-buffer)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defun cla/revert-buffer-no-confirm ()
+  "Revert buffer without confirmation"
+  (interactive)
+  (revert-buffer t t))
+
+;; Set window keys
+(global-set-key (kbd "S-M-<up>") 'enlarge-window)
+(global-set-key (kbd "S-M-<down>") 'shrink-window)
+(global-set-key (kbd "S-M-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-M-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "H-<left>") 'previous-buffer)
+(global-set-key (kbd "H-<right>") 'next-buffer)
+(global-set-key (kbd "<triple-wheel-right>") 'previous-buffer)
+(global-set-key (kbd "<triple-wheel-left>") 'next-buffer)
+(global-set-key (kbd "H-<tab>") 'other-frame)
+
+;; Hotkeys ftw
+(global-set-key (kbd "<f5>") 'revert-buffer)
+(global-set-key (kbd "C-<f5>") 'cla/revert-buffer-no-confirm)
+
+(defun cla/back-to-indentation-or-beginning ()
+  (interactive)
+  (if (= (point) (progn (back-to-indentation) (point)))
+      (beginning-of-line)))
+
+(global-set-key (kbd "C-a") 'cla/back-to-indentation-or-beginning)
+(global-set-key (kbd "<home>") 'cla/back-to-indentation-or-beginning)
+#+END_SRC
+
+** Font Setup
+
+#+BEGIN_SRC emacs-lisp
+(defvar cla/font-family         "Source Code Pro")
+(defvar cla/font-height-default 100)
+(defvar cla/font-height-large   110)
+
+(defun cla/set-default-font ()
+  (interactive)
+  (set-face-attribute 'default nil
+                      :family cla/font-family :height cla/font-height-default))
+
+(defun cla/set-large-font ()
+  (interactive)
+  (set-face-attribute 'default nil
+                      :family cla/font-family :height cla/font-height-large))
+(global-set-key (kbd "H-f 2") 'cla/set-large-font)
+
+(cla/set-default-font)
+#+END_SRC
+
+* Packages
+
+#+BEGIN_SRC emacs-lisp
+(cla/install-from-elpa 'htmlize)
+#+END_SRC
+
+** web development
+
+I think for Javascript/JSX based types I should replace this RJSX,
+see work box for setup
+
+#+BEGIN_SRC emacs-lisp
+(cla/install-from-elpa 'web-mode)
+
+(dolist (suffix '("\\.tsx\\'" "\\.ts\\'" "\\.json\\'" "\\.js\\'" "\\.jsx\\'" "\\.html\\'" "\\.css\\'" "\\.scss\\'"))
+  (add-to-list 'auto-mode-alist `(,suffix . web-mode)))
+#+END_SRC
