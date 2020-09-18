@@ -1,6 +1,62 @@
 #+TITLE: Emacs Configuration
 #+OPTIONS: toc:nil
 
+* Before everything else ...
+
+** Clean UI
+
+Remove all those noobish frame decorations
+
+#+BEGIN_SRC emacs-lisp
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode 0)
+(setq inhibit-startup-screen t)
+(global-hl-line-mode 1)
+#+END_SRC
+
+** Theme Setup I
+
+#+BEGIN_SRC emacs-lisp
+(defconst cla/the-theme-pkg
+  'dracula-theme)
+(defconst cla/the-theme
+  'dracula)
+#+END_SRC
+
+... let's load up our theme if it exists. Otherwise
+we would have to wait for package initialization to
+complete while staring at a white window -.-
+
+#+BEGIN_SRC emacs-lisp
+(if (package-installed-p cla/the-theme-pkg)
+  (load-theme cla/the-theme))
+#+END_SRC
+
+However if we don't have it installed yet, we try a
+second time, after package initialization.
+
+** Font Setup
+
+#+BEGIN_SRC emacs-lisp
+(defvar cla/font-family         "Source Code Pro")
+(defvar cla/font-height-default 100)
+(defvar cla/font-height-large   110)
+
+(defun cla/set-default-font ()
+  (interactive)
+  (set-face-attribute 'default nil
+                      :family cla/font-family :height cla/font-height-default))
+
+(defun cla/set-large-font ()
+  (interactive)
+  (set-face-attribute 'default nil
+                      :family cla/font-family :height cla/font-height-large))
+(global-set-key (kbd "H-f 2") 'cla/set-large-font)
+
+(cla/set-default-font)
+#+END_SRC
+
 * Setup package.el
 
 #+BEGIN_SRC emacs-lisp
@@ -15,6 +71,14 @@
 #+END_SRC
 
 * General setup
+
+** Theme Setup II
+
+#+BEGIN_SRC emacs-lisp
+(unless (package-installed-p cla/the-theme-pkg)
+  (package-install cla/the-theme-pkg)
+  (load-theme cla/the-theme))
+#+END_SRC
 
 Highlights the line on which the point is
 
@@ -51,21 +115,12 @@ Disable emacs to auto-create files when editing
 (setq auto-save-default nil) ; stop creating #autosave# files
 #+END_SRC
 
-** Clean UI
-
-Remove all those noobish frame decorations
+** Keychords
 
 #+BEGIN_SRC emacs-lisp
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(menu-bar-mode 0)
 (windmove-default-keybindings 'meta)
 (global-set-key (kbd "M-SPC") 'set-mark-command)
-(setq inhibit-startup-screen t)
-(global-hl-line-mode 1)
 #+END_SRC
-
-** Keychords
 
 cla/switch-to-other-buffer is useful when editing two files
 in one buffer, for example source/header file.
@@ -108,41 +163,99 @@ in one buffer, for example source/header file.
 (global-set-key (kbd "<home>") 'cla/back-to-indentation-or-beginning)
 #+END_SRC
 
-** Font Setup
-
-#+BEGIN_SRC emacs-lisp
-(defvar cla/font-family         "Source Code Pro")
-(defvar cla/font-height-default 100)
-(defvar cla/font-height-large   110)
-
-(defun cla/set-default-font ()
-  (interactive)
-  (set-face-attribute 'default nil
-                      :family cla/font-family :height cla/font-height-default))
-
-(defun cla/set-large-font ()
-  (interactive)
-  (set-face-attribute 'default nil
-                      :family cla/font-family :height cla/font-height-large))
-(global-set-key (kbd "H-f 2") 'cla/set-large-font)
-
-(cla/set-default-font)
-#+END_SRC
-
 * Packages
+
+** Random Stuff
+
+Stuff that doesn't need much setup
 
 #+BEGIN_SRC emacs-lisp
 (cla/install-from-elpa 'htmlize)
+(cla/install-from-elpa 'markdown-mode)
+(cla/install-from-elpa 'magit)
 #+END_SRC
 
-** web development
+** Processing
 
-I think for Javascript/JSX based types I should replace this RJSX,
-see work box for setup
+#+BEGIN_SRC emacs-lisp
+(setq processing-location
+      "c:/Users/chris/processing-3.5.3/processing-java.exe")
+(setq processing-application-dir
+      "c:/Users/chris/processing-3.5.3")
+(setq processing-sketchbook-dir
+      "c:/Users/chris/Documents/Processing")
+#+END_SRC
+
+** Global Utilies
+
+*** Company Mode
+
+#+BEGIN_SRC emacs-lisp
+(cla/install-from-elpa 'company)
+(setq company-dabbrev-downcase nil)
+(setq company-minimum-prefix-length 2)
+(setq company-idle-delay 0)
+(add-hook 'after-init-hook 'global-company-mode)
+#+END_SRC
+
+*** Projectile
+
+#+BEGIN_SRC emacs-lisp
+(cla/install-from-elpa 'projectile)
+(projectile-global-mode)
+(global-set-key (kbd "C-c p f") 'projectile-find-file)
+(global-set-key (kbd "C-c p g") 'projectile-grep)
+(global-set-key (kbd "C-c p s") 'projectile-switch-project)
+(global-set-key (kbd "C-c p k") 'projectile-kill-buffers)
+#+END_SRC
+
+*** Helm
+
+#+BEGIN_SRC emacs-lisp
+(cla/install-from-elpa 'helm)
+(require 'helm-config)
+(helm-mode 1)
+#+END_SRC
+
+We want our Helm Buffer to always open in the bottom
+part of the window we're in.
+
+This makes it rather predictable.
+
+#+BEGIN_SRC emacs-lisp
+(setq helm-split-window-in-side-p t)
+(setq helm-split-window-default-side 'below)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load "helm-config"
+  (global-set-key (kbd "C-x C-f") #'helm-find-files)
+  (global-set-key (kbd "M-x") #'helm-M-x)
+  (define-key helm-find-files-map "\t" 'helm-execute-persistent-action)
+  (define-key helm-read-file-map "\t" 'helm-execute-persistent-action))
+#+END_SRC
+
+Finally we need Helm to interact with projectile
+
+#+BEGIN_SRC emacs-lisp
+(cla/install-from-elpa 'helm-projectile)
+(require 'helm-projectile)
+(helm-projectile-on)
+#+END_SRC
+
+** Web Development
+
+I think for Javascript/JSX based types I should replace this RJSX.
 
 #+BEGIN_SRC emacs-lisp
 (cla/install-from-elpa 'web-mode)
+(cla/install-from-elpa 'rjsx-mode)
 
-(dolist (suffix '("\\.tsx\\'" "\\.ts\\'" "\\.json\\'" "\\.js\\'" "\\.jsx\\'" "\\.html\\'" "\\.css\\'" "\\.scss\\'"))
+(dolist (suffix '("\\.js\\'" "\\.jsx\\'"))
+  (add-to-list 'auto-mode-alist `(,suffix . rjsx-mode)))
+
+(dolist (suffix '("\\.tsx\\'" "\\.ts\\'" "\\.json\\'" "\\.html\\'" "\\.css\\'" "\\.scss\\'"))
   (add-to-list 'auto-mode-alist `(,suffix . web-mode)))
 #+END_SRC
+
+TODO I should check RJSX for Typescript.
