@@ -1,6 +1,14 @@
 #+TITLE: Emacs Configuration
 #+OPTIONS: toc:nil
 
+* Offene Punkte
+
+** Diminish doesn't work
+
+Should be in after-init-hook?
+
+** Setup Smartparens properly
+
 * Before everything else ...
 
 ** Clean UI
@@ -165,6 +173,12 @@ in one buffer, for example source/header file.
 
 * Packages
 
+Let's ensure diminish is installed so we can use it later on.
+
+#+BEGIN_SRC emacs-lisp
+(cla/install-from-elpa 'diminish)
+#+END_SRC
+
 ** Random Stuff
 
 Stuff that doesn't need much setup
@@ -188,6 +202,24 @@ Stuff that doesn't need much setup
 
 ** Global Utilies
 
+*** Diff HL Mode
+
+#+BEGIN_SRC emacs-lisp
+(cla/install-from-elpa 'diff-hl)
+(add-hook 'after-init-hook 'global-diff-hl-mode)
+#+END_SRC
+
+*** Smart Parens
+
+#+BEGIN_SRC emacs-lisp
+(cla/install-from-elpa 'smartparens)
+(add-hook 'after-init-hook 'smartparens-global-mode)
+(add-hook 'after-init-hook 'show-smartparens-global-mode)
+(diminish 'smartparens-mode)
+;(sp-pair "'" nil :actions :rem)
+(global-set-key (kbd "C-.") 'sp-select-next-thing)
+#+END_SRC
+
 *** Company Mode
 
 #+BEGIN_SRC emacs-lisp
@@ -196,6 +228,7 @@ Stuff that doesn't need much setup
 (setq company-minimum-prefix-length 2)
 (setq company-idle-delay 0)
 (add-hook 'after-init-hook 'global-company-mode)
+(diminish 'company-mode)
 #+END_SRC
 
 *** Projectile
@@ -241,6 +274,14 @@ Finally we need Helm to interact with projectile
 (cla/install-from-elpa 'helm-projectile)
 (require 'helm-projectile)
 (helm-projectile-on)
+#+END_SRC
+
+*** Smart Mode Line
+
+#+BEGIN_SRC emacs-lisp
+(cla/install-from-elpa 'smart-mode-line)
+(setq sml/theme 'respectful)
+(sml/setup)
 #+END_SRC
 
 ** Web Development
