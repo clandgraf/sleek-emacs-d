@@ -1,20 +1,15 @@
-;;; package --- Summary
+;;; cla-filehandling.el --- Interaction between emacs and the outside world
+;;
 ;;; Commentary:
+;;
+;; This provides functions/keybindings for using files in the outside world:
+;; F6 navigates to the current file/folder in your file browser
+;; F7/C-F7 copies the current file/folder to your clipboard
+;; F5/C-F5 reverts/force-reverts the current file
+;;
 ;;; Code:
 
-(defun cla/--get-relevant-file ()
-  "Return the relevant file for current buffer."
-  (if (equal major-mode 'dired-mode)
-      default-directory
-    (buffer-file-name)))
-
-(defmacro cla/with-relevant-file (file-name &rest body)
-  "Execute BODY with current buffer's relevant file bound to FILE-NAME."
-  (declare (indent 1))
-  `(let ((,file-name (cla/--get-relevant-file)))
-     (if (null ,file-name)
-         (message "No file available.")
-       ,@body)))
+(require 'cla-util-fs)
 
 (defun cla/win-path-to-wsl-path (file-name)
   "Convert FILE-NAME to WSL Path using wsl and wslpath."
@@ -70,9 +65,16 @@
   (cla/with-relevant-file f
     (cla/file-browser-command f)))
 
-(global-set-key (kbd "<f6>") 'cla/copy-file-name-to-clipboard)
-(global-set-key (kbd "C-<f6>") 'cla/copy-wsl-file-name-to-clipboard)
-(global-set-key (kbd "<f7>") 'cla/open-buffer-path)
+(defun cla/revert-buffer-no-confirm ()
+  "Revert buffer without confirmation"
+  (interactive)
+  (revert-buffer t t))
+
+(global-set-key (kbd "<f5>") 'revert-buffer)
+(global-set-key (kbd "C-<f5>") 'cla/revert-buffer-no-confirm)
+(global-set-key (kbd "<f6>") 'cla/open-buffer-path)
+(global-set-key (kbd "<f7>") 'cla/copy-file-name-to-clipboard)
+(global-set-key (kbd "C-<f7>") 'cla/copy-wsl-file-name-to-clipboard)
 
 (provide 'cla-filehandling)
 ;;; cla-filehandling.el ends here

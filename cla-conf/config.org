@@ -126,9 +126,20 @@ Disable emacs to auto-create files when editing
 
 ** Keychords
 
+windmove is bound to meta, so we can move between adjacent
+windows using Alt+Arrow Keys, instead of C-x o. Note that this
+collides with default org-mode keys.
+
+The other key bindings resize the current window using
+the arrow keys and Shift+Alt. Useful if you need to see more.
+
 #+BEGIN_SRC emacs-lisp
 (windmove-default-keybindings 'meta)
-(global-set-key (kbd "M-SPC") 'set-mark-command)
+
+(global-set-key (kbd "S-M-<up>") 'enlarge-window)
+(global-set-key (kbd "S-M-<down>") 'shrink-window)
+(global-set-key (kbd "S-M-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-M-<right>") 'enlarge-window-horizontally)
 #+END_SRC
 
 cla/switch-to-other-buffer is useful when editing two files
@@ -142,27 +153,21 @@ in one buffer, for example source/header file.
 (global-set-key (kbd "C-<tab>") 'cla/switch-to-other-buffer)
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-(defun cla/revert-buffer-no-confirm ()
-  "Revert buffer without confirmation"
-  (interactive)
-  (revert-buffer t t))
+TODO what to do about those??
 
-;; Set window keys
-(global-set-key (kbd "S-M-<up>") 'enlarge-window)
-(global-set-key (kbd "S-M-<down>") 'shrink-window)
-(global-set-key (kbd "S-M-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "S-M-<right>") 'enlarge-window-horizontally)
+#+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "H-<left>") 'previous-buffer)
 (global-set-key (kbd "H-<right>") 'next-buffer)
 (global-set-key (kbd "<triple-wheel-right>") 'previous-buffer)
 (global-set-key (kbd "<triple-wheel-left>") 'next-buffer)
 (global-set-key (kbd "H-<tab>") 'other-frame)
+#+END_SRC
 
-;; Hotkeys ftw
-(global-set-key (kbd "<f5>") 'revert-buffer)
-(global-set-key (kbd "C-<f5>") 'cla/revert-buffer-no-confirm)
+This makes home/C-a navigate back to indentation or if
+already at indentation col 0, which is more in line with modern
+editors.
 
+#+BEGIN_SRC emacs-lisp
 (defun cla/back-to-indentation-or-beginning ()
   (interactive)
   (if (= (point) (progn (back-to-indentation) (point)))
@@ -300,7 +305,20 @@ Finally we need Helm to interact with projectile
 (sml/setup)
 #+END_SRC
 
-** Web Development
+*** Flycheck
+
+#+BEGIN_SRC emacs-lisp
+(cla/install-from-elpa 'flycheck)
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+(setq flycheck-check-syntax-automatically '(mode-enabled save))
+(setq-default flycheck-disabled-checkers '(c/c++-gcc c/c++-clang javascript-jshint))
+(add-hook 'after-init-hook #'global-flycheck-mode)
+(flycheck-add-mode 'javascript-eslint 'rjsx-mode)
+#+END_SRC
+
+* Web Development
 
 I think for Javascript/JSX based types I should replace this RJSX.
 
