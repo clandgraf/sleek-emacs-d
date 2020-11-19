@@ -1,4 +1,6 @@
 *
+!*/
 !.gitignore
 !init.el
-!config.org
+!/cla-conf/**
+/cla-conf/config.el

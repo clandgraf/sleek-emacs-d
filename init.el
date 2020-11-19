@@ -19,7 +19,8 @@
  ;; If there is more than one, they won't work right.
  )
 
-(org-babel-load-file "~/.emacs.d/config.org")
+(load-file "~/.emacs.d/cla-conf/cla-filehandling.el")
+(org-babel-load-file "~/.emacs.d/cla-conf/config.org")
 
 ;; ~~~~~~~~~~~~~~~~~~~
 ;; slime

@@ -61,9 +61,8 @@ second time, after package initialization.
   (interactive)
   (set-face-attribute 'default nil
                       :family cla/font-family :height cla/font-height-large))
-(global-set-key (kbd "H-f 2") 'cla/set-large-font)
 
-(cla/set-default-font)
+(cla/set-large-font)
 #+END_SRC
 
 * Setup package.el
