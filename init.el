@@ -21,25 +21,3 @@
 
 (load-file "~/.emacs.d/cla-conf/cla-filehandling.el")
 (org-babel-load-file "~/.emacs.d/cla-conf/config.org")
-
-;; ~~~~~~~~~~~~~~~~~~~
-;; slime
-;; ~~~~~~~~~~~~~~~~~~~
-
-(cla/install-from-elpa 'slime)
-(cla/install-from-elpa 'slime-company)
-(setq inferior-lisp-program "/data/data/com.termux/files/home/ecl/bin/ecl")
-(setq slime-contribs '(slime-fancy slime-company))
-
-;; ~~~~~~~~~
-;; Diminish
-;; ~~~~~~~~~
-
-(cla/install-from-elpa 'diminish)
-(add-hook 'after-init-hook (lambda ()
-                             (diminish 'global-company-mode)
-                             (diminish 'helm-mode)))
-
-;; ~~~~~~~~~~~~~~~~~~~
-
-(put 'dired-find-alternate-file 'disabled nil)

@@ -172,6 +172,15 @@ in one buffer, for example source/header file.
 (global-set-key (kbd "<home>") 'cla/back-to-indentation-or-beginning)
 #+END_SRC
 
+** Dired
+
+This enables the 'a' key in dired, which can be used to open the
+file or directory at point in the same buffer.
+
+#+BEGIN_SRC emacs-lisp
+(put 'dired-find-alternate-file 'disabled nil)
+#+END_SRC
+
 * Packages
 
 Let's ensure diminish is installed so we can use it later on.
@@ -205,6 +214,8 @@ Stuff that doesn't need much setup
 
 *** Diff HL Mode
 
+Highlight modified lines of code in files under version control
+
 #+BEGIN_SRC emacs-lisp
 (cla/install-from-elpa 'diff-hl)
 (add-hook 'after-init-hook 'global-diff-hl-mode)
@@ -214,9 +225,10 @@ Stuff that doesn't need much setup
 
 #+BEGIN_SRC emacs-lisp
 (cla/install-from-elpa 'smartparens)
-(add-hook 'after-init-hook 'smartparens-global-mode)
-(add-hook 'after-init-hook 'show-smartparens-global-mode)
-(diminish 'smartparens-mode)
+(with-eval-after-load 'smartparens
+  (diminish 'smartparens-mode))
+(smartparens-global-mode)
+(show-smartparens-global-mode)
 ;(sp-pair "'" nil :actions :rem)
 (global-set-key (kbd "C-.") 'sp-select-next-thing)
 #+END_SRC
@@ -229,7 +241,8 @@ Stuff that doesn't need much setup
 (setq company-minimum-prefix-length 2)
 (setq company-idle-delay 0)
 (add-hook 'after-init-hook 'global-company-mode)
-(diminish 'company-mode)
+(with-eval-after-load 'company
+  (diminish 'company-mode))
 #+END_SRC
 
 *** Projectile
@@ -237,6 +250,7 @@ Stuff that doesn't need much setup
 #+BEGIN_SRC emacs-lisp
 (cla/install-from-elpa 'projectile)
 (projectile-global-mode)
+(setq projectile-mode-line-prefix " ")
 (global-set-key (kbd "C-c p f") 'projectile-find-file)
 (global-set-key (kbd "C-c p g") 'projectile-grep)
 (global-set-key (kbd "C-c p s") 'projectile-switch-project)
@@ -266,7 +280,8 @@ This makes it rather predictable.
   (global-set-key (kbd "C-x C-f") #'helm-find-files)
   (global-set-key (kbd "M-x") #'helm-M-x)
   (define-key helm-find-files-map "\t" 'helm-execute-persistent-action)
-  (define-key helm-read-file-map "\t" 'helm-execute-persistent-action))
+  (define-key helm-read-file-map "\t" 'helm-execute-persistent-action)
+  (diminish 'helm-mode))
 #+END_SRC
 
 Finally we need Helm to interact with projectile
@@ -301,3 +316,12 @@ I think for Javascript/JSX based types I should replace this RJSX.
 #+END_SRC
 
 TODO I should check RJSX for Typescript.
+
+** Slime
+
+#+BEGIN_SRC emacs-lisp
+; (cla/install-from-elpa 'slime)
+; (cla/install-from-elpa 'slime-company)
+; (setq slime-contribs '(slime-fancy slime-company))
+; (setq inferior-lisp-program "/data/data/com.termux/files/home/ecl/bin/ecl")
+#+END_SRC
