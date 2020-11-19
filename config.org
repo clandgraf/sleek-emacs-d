@@ -37,6 +37,7 @@ we would have to wait for package initialization to
 complete while staring at a white window -.-
 
 #+BEGIN_SRC emacs-lisp
+(require 'package)
 (if (package-installed-p cla/the-theme-pkg)
   (load-theme cla/the-theme))
 #+END_SRC
