@@ -102,6 +102,7 @@ Highlights the line on which the point is
 (setq-default c-basic-offset 4)     ; c-mode indent 4 spaces
 (add-hook 'before-save-hook         ; on save remove trailing whitespace
           'delete-trailing-whitespace)
+(setq default-buffer-file-coding-system 'utf-8-unix)
 #+END_SRC
 
 ** Visual Bell
