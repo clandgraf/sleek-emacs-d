@@ -305,17 +305,17 @@ Finally we need Helm to interact with projectile
 (sml/setup)
 #+END_SRC
 
-*** Flycheck
+*** COMMENT Flycheck
 
 #+BEGIN_SRC emacs-lisp
-(cla/install-from-elpa 'flycheck)
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
-(setq flycheck-check-syntax-automatically '(mode-enabled save))
-(setq-default flycheck-disabled-checkers '(c/c++-gcc c/c++-clang javascript-jshint))
-(add-hook 'after-init-hook #'global-flycheck-mode)
-(flycheck-add-mode 'javascript-eslint 'rjsx-mode)
+  ;; (cla/install-from-elpa 'flycheck)
+  ;; (use-package flycheck
+  ;;   :ensure t
+  ;;   :init (global-flycheck-mode))
+  ;; (setq flycheck-check-syntax-automatically '(mode-enabled save))
+  ;; (setq-default flycheck-disabled-checkers '(c/c++-gcc c/c++-clang javascript-jshint))
+  ;; (add-hook 'after-init-hook #'global-flycheck-mode)
+  ;; (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
 #+END_SRC
 
 * Web Development

@@ -70,8 +70,17 @@
   (interactive)
   (revert-buffer t t))
 
+(defun cla/revert-all-buffers ()
+  (interactive)
+  (dolist (buf (buffer-list))
+    (with-current-buffer buf
+      (when (and (buffer-file-name) (file-exists-p (buffer-file-name)) (not (buffer-modified-p)))
+        (revert-buffer t t t))))
+  (message "Refreshed open files."))
+
 (global-set-key (kbd "<f5>") 'revert-buffer)
 (global-set-key (kbd "C-<f5>") 'cla/revert-buffer-no-confirm)
+(global-set-key (kbd "C-M-<f5>") 'cla/revert-all-buffers)
 (global-set-key (kbd "<f6>") 'cla/open-buffer-path)
 (global-set-key (kbd "<f7>") 'cla/copy-file-name-to-clipboard)
 (global-set-key (kbd "C-<f7>") 'cla/copy-wsl-file-name-to-clipboard)
