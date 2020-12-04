@@ -9,7 +9,7 @@ Should be in after-init-hook?
 
 ** Setup Smartparens properly
 
-* Before everything else ...
+* Before everything else
 
 ** Clean UI
 
@@ -80,6 +80,14 @@ second time, after package initialization.
 
 * General setup
 
+This stores all open files when shutting down Emacs. I just need to
+remind myself to close buffers when "done", otherwise those will build
+up.
+
+#+BEGIN_SRC emacs-lisp
+(desktop-save-mode 1)
+#+END_SRC
+
 ** Theme Setup II
 
 #+BEGIN_SRC emacs-lisp
@@ -102,6 +110,7 @@ Highlights the line on which the point is
 (setq-default c-basic-offset 4)     ; c-mode indent 4 spaces
 (add-hook 'before-save-hook         ; on save remove trailing whitespace
           'delete-trailing-whitespace)
+(set-language-environment "UTF-8")
 (setq default-buffer-file-coding-system 'utf-8-unix)
 #+END_SRC
 
