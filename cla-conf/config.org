@@ -65,7 +65,7 @@ second time, after package initialization.
 (cla/set-large-font)
 #+END_SRC
 
-* Setup package.el
+* Setup package.el + use-package
 
 #+BEGIN_SRC emacs-lisp
 (package-initialize)
@@ -76,17 +76,11 @@ second time, after package initialization.
 (defun cla/install-from-elpa (package)
   (unless (package-installed-p package)
     (package-install package)))
+
+(cla/install-from-elpa 'use-package)
 #+END_SRC
 
 * General setup
-
-This stores all open files when shutting down Emacs. I just need to
-remind myself to close buffers when "done", otherwise those will build
-up.
-
-#+BEGIN_SRC emacs-lisp
-(desktop-save-mode 1)
-#+END_SRC
 
 ** Theme Setup II
 
@@ -186,6 +180,17 @@ editors.
 (global-set-key (kbd "<home>") 'cla/back-to-indentation-or-beginning)
 #+END_SRC
 
+*** Error Navigation
+
+next-error/previous-error allow navigating matches e.g. generated from
+grepping. These bindings are comfortably reached with the right hand
+when using an ansi layout:
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-[") 'previous-error)
+(global-set-key (kbd "M-]") 'next-error)
+#+END_SRC
+
 ** Dired
 
 This enables the 'a' key in dired, which can be used to open the
@@ -249,6 +254,8 @@ Highlight modified lines of code in files under version control
 
 *** Company Mode
 
+Basic Company Setup
+
 #+BEGIN_SRC emacs-lisp
 (cla/install-from-elpa 'company)
 (setq company-dabbrev-downcase nil)
@@ -257,6 +264,23 @@ Highlight modified lines of code in files under version control
 (add-hook 'after-init-hook 'global-company-mode)
 (with-eval-after-load 'company
   (diminish 'company-mode))
+#+END_SRC
+
+Company Box is a company frontend that supports icons
+
+#+BEGIN_SRC emacs-lisp
+(cla/install-from-elpa 'company-box)
+(use-package company-box
+  :hook (company-mode . company-box-mode))
+#+END_SRC
+
+*** LSP Mode
+
+Used for:
+- Rust
+
+#+BEGIN_SRC emacs-lisp
+;(cla/install-from-elpa 'lsp-mode)
 #+END_SRC
 
 *** Projectile
@@ -338,17 +362,33 @@ I think for Javascript/JSX based types I should replace this RJSX.
 (dolist (suffix '("\\.js\\'" "\\.jsx\\'"))
   (add-to-list 'auto-mode-alist `(,suffix . rjsx-mode)))
 
-(dolist (suffix '("\\.tsx\\'" "\\.ts\\'" "\\.json\\'" "\\.html\\'" "\\.css\\'" "\\.scss\\'"))
+(dolist (suffix '("\\.tsx\\'" "\\.ts\\'" "\\.json\\'" "\\.html\\'" "\\.css\\'"))
   (add-to-list 'auto-mode-alist `(,suffix . web-mode)))
+
+(dolist (suffix '("\\.scss\\'"))
+  (add-to-list 'auto-mode-alist `(,suffix . scss-mode)))
+#+END_SRC
+
+Customize indentation
+
+#+BEGIN_SRC emacs-lisp
+(setq sgml-basic-offset 4)
 #+END_SRC
 
 TODO I should check RJSX for Typescript.
 
-** Slime
+* Slime
 
 #+BEGIN_SRC emacs-lisp
 ; (cla/install-from-elpa 'slime)
 ; (cla/install-from-elpa 'slime-company)
 ; (setq slime-contribs '(slime-fancy slime-company))
 ; (setq inferior-lisp-program "/data/data/com.termux/files/home/ecl/bin/ecl")
+#+END_SRC
+
+* Rust
+
+#+BEGIN_SRC emacs-lisp
+;(cla/install-from-elpa 'rust-mode)
+;(add-hook rust-mode-hook #'lsp)
 #+END_SRC
