@@ -16,8 +16,10 @@ Should be in after-init-hook?
 Remove all those noobish frame decorations
 
 #+BEGIN_SRC emacs-lisp
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+(if (display-graphic-p)
+    (progn
+      (tool-bar-mode -1)
+      (scroll-bar-mode -1)))
 (menu-bar-mode 0)
 (setq inhibit-startup-screen t)
 (global-hl-line-mode 1)
@@ -37,8 +39,7 @@ we would have to wait for package initialization to
 complete while staring at a white window -.-
 
 #+BEGIN_SRC emacs-lisp
-(require 'package)
-(if (package-installed-p cla/the-theme-pkg)
+(ignore-errors
   (load-theme cla/the-theme))
 #+END_SRC
 
