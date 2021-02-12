@@ -39,6 +39,8 @@ complete while staring at a white window -.-
 
 #+BEGIN_SRC emacs-lisp
 (ignore-errors
+  (require 'package)
+  (package-initialize)
   (load-theme cla/the-theme))
 #+END_SRC
 
