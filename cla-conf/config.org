@@ -7,8 +7,6 @@
 
 Should be in after-init-hook?
 
-** Setup Smartparens properly
-
 * Before everything else
 
 ** Clean UI
@@ -70,7 +68,6 @@ second time, after package initialization.
 * Setup package.el + use-package
 
 #+BEGIN_SRC emacs-lisp
-(package-initialize)
 (add-to-list 'package-archives
   '("melpa" . "http://melpa.org/packages/") t)
 (package-refresh-contents)
@@ -78,6 +75,10 @@ second time, after package initialization.
 (defun cla/install-from-elpa (package)
   (unless (package-installed-p package)
     (package-install package)))
+
+(defmacro use-package-from-elpa (pkg &rest body)
+  `(cla/install-from-elpa (quote ,pkg))
+  `(use-package ,pkg ,@body))
 
 (cla/install-from-elpa 'use-package)
 #+END_SRC
@@ -140,6 +141,11 @@ the arrow keys and Shift+Alt. Useful if you need to see more.
 
 #+BEGIN_SRC emacs-lisp
 (windmove-default-keybindings 'meta)
+
+(define-key org-mode-map (kbd "<M-up>") nil)
+(define-key org-mode-map (kbd "<M-down>") nil)
+(define-key org-mode-map (kbd "<M-left>") nil)
+(define-key org-mode-map (kbd "<M-right>") nil)
 
 (global-set-key (kbd "S-M-<up>") 'enlarge-window)
 (global-set-key (kbd "S-M-<down>") 'shrink-window)
@@ -248,6 +254,7 @@ Highlight modified lines of code in files under version control
 (cla/install-from-elpa 'smartparens)
 (with-eval-after-load 'smartparens
   (diminish 'smartparens-mode))
+(require 'smartparens-config)
 (smartparens-global-mode)
 (show-smartparens-global-mode)
 ;(sp-pair "'" nil :actions :rem)
@@ -271,8 +278,8 @@ Basic Company Setup
 Company Box is a company frontend that supports icons
 
 #+BEGIN_SRC emacs-lisp
-(cla/install-from-elpa 'company-box)
-(use-package company-box
+(use-package-from-elpa company-box
+  :config (diminish 'company-box-mode)
   :hook (company-mode . company-box-mode))
 #+END_SRC
 
