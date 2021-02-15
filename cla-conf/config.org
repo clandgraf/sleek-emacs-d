@@ -363,6 +363,14 @@ Finally we need Helm to interact with projectile
 
 * Web Development
 
+Some minor major-modes (lol) for common formats
+
+#+BEGIN_SRC
+(cla/install-from-elpa 'yaml-mode)
+(cla/install-from-elpa 'mustache-mode)
+(require 'mustache-mode)
+#+END_SRC
+
 I think for Javascript/JSX based types I should replace this RJSX.
 
 #+BEGIN_SRC emacs-lisp
