@@ -297,6 +297,14 @@ Used for:
 (global-set-key (kbd "C-c p k") 'projectile-kill-buffers)
 #+END_SRC
 
+Let's enable native indexing/no caching, if the system has git and fd
+this should be sufficiently efficient:
+
+#+BEGIN_SRC emacs-lisp
+(setq projectile-indexing-method 'alien)
+(setq projectile-enable-caching nil)
+#+END_SRC emacs-lisp
+
 *** Helm
 
 #+BEGIN_SRC emacs-lisp
