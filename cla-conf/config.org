@@ -303,7 +303,7 @@ this should be sufficiently efficient:
 #+BEGIN_SRC emacs-lisp
 (setq projectile-indexing-method 'alien)
 (setq projectile-enable-caching nil)
-#+END_SRC emacs-lisp
+#+END_SRC
 
 *** Helm
 
