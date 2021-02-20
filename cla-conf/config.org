@@ -158,7 +158,7 @@ in one buffer, for example source/header file.
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer))))
 
-(global-set-key (kbd "C-<tab>") 'cla/switch-to-other-buffer)
+(global-set-key (kbd "M-]") 'cla/switch-to-other-buffer)
 #+END_SRC
 
 TODO what to do about those??
