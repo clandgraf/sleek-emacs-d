@@ -11,24 +11,26 @@ Should be in after-init-hook?
 
 ** Clean UI
 
-Remove all those noobish frame decorations
+Remove all those noobish frame decorations. First two are only
+available when running on a graphical display.
 
 #+BEGIN_SRC emacs-lisp
-(ignore-errors
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1))
-(menu-bar-mode 0)
-(setq inhibit-startup-screen t)
-(global-hl-line-mode 1)
+  (ignore-errors
+    (tool-bar-mode -1)
+    (scroll-bar-mode -1))
+  (menu-bar-mode 0)
+  (setq inhibit-startup-screen t)
+  (global-hl-line-mode 1)
+  (xterm-mouse-mode)
 #+END_SRC
 
 ** Theme Setup I
 
 #+BEGIN_SRC emacs-lisp
-(defconst cla/the-theme-pkg
-  'dracula-theme)
-(defconst cla/the-theme
-  'dracula)
+  (defconst cla/the-theme-pkg
+    'dracula-theme)
+  (defconst cla/the-theme
+    'dracula)
 #+END_SRC
 
 ... let's load up our theme if it exists. Otherwise
@@ -36,10 +38,10 @@ we would have to wait for package initialization to
 complete while staring at a white window -.-
 
 #+BEGIN_SRC emacs-lisp
-(ignore-errors
-  (require 'package)
-  (package-initialize)
-  (load-theme cla/the-theme))
+  (ignore-errors
+    (require 'package)
+    (package-initialize)
+    (load-theme cla/the-theme))
 #+END_SRC
 
 However if we don't have it installed yet, we try a
@@ -48,39 +50,40 @@ second time, after package initialization.
 ** Font Setup
 
 #+BEGIN_SRC emacs-lisp
-(defvar cla/font-family         "Source Code Pro")
-(defvar cla/font-height-default 100)
-(defvar cla/font-height-large   110)
+  (defvar cla/font-family         "Source Code Pro")
+  (defvar cla/font-height-default 100)
+  (defvar cla/font-height-large   110)
 
-(defun cla/set-default-font ()
-  (interactive)
-  (set-face-attribute 'default nil
-                      :family cla/font-family :height cla/font-height-default))
+  (defun cla/set-default-font ()
+    (interactive)
+    (set-face-attribute 'default nil
+                        :family cla/font-family :height cla/font-height-default))
 
-(defun cla/set-large-font ()
-  (interactive)
-  (set-face-attribute 'default nil
-                      :family cla/font-family :height cla/font-height-large))
+  (defun cla/set-large-font ()
+    (interactive)
+    (set-face-attribute 'default nil
+                        :family cla/font-family :height cla/font-height-large))
 
-(cla/set-large-font)
+  (cla/set-large-font)
 #+END_SRC
 
 * Setup package.el + use-package
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'package-archives
-  '("melpa" . "http://melpa.org/packages/") t)
-(package-refresh-contents)
+  (add-to-list 'package-archives
+    '("melpa" . "http://melpa.org/packages/") t)
+  (package-refresh-contents)
 
-(defun cla/install-from-elpa (package)
-  (unless (package-installed-p package)
-    (package-install package)))
+  (defun cla/install-from-elpa (package)
+    (unless (package-installed-p package)
+      (package-install package)))
 
-(defmacro use-package-from-elpa (pkg &rest body)
-  `(cla/install-from-elpa (quote ,pkg))
-  `(use-package ,pkg ,@body))
+  (defmacro use-package-from-elpa (pkg &rest body)
+    `(progn
+       (cla/install-from-elpa (quote ,pkg))
+       (use-package ,pkg ,@body)))
 
-(cla/install-from-elpa 'use-package)
+  (cla/install-from-elpa 'use-package)
 #+END_SRC
 
 * General setup
@@ -88,15 +91,9 @@ second time, after package initialization.
 ** Theme Setup II
 
 #+BEGIN_SRC emacs-lisp
-(unless (package-installed-p cla/the-theme-pkg)
-  (package-install cla/the-theme-pkg)
-  (load-theme cla/the-theme))
-#+END_SRC
-
-Highlights the line on which the point is
-
-#+BEGIN_SRC emacs-lisp
-(global-hl-line-mode 1)
+  (unless (package-installed-p cla/the-theme-pkg)
+    (package-install cla/the-theme-pkg)
+    (load-theme cla/the-theme))
 #+END_SRC
 
 ** Sane Code Formatting
@@ -195,8 +192,8 @@ grepping. These bindings are comfortably reached with the right hand
 when using an ansi layout:
 
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "M-[") 'previous-error)
-(global-set-key (kbd "M-]") 'next-error)
+;(global-set-key (kbd "M-[") 'previous-error)
+;(global-set-key (kbd "M-]") 'next-error)
 #+END_SRC
 
 ** Dired
@@ -266,21 +263,21 @@ Highlight modified lines of code in files under version control
 Basic Company Setup
 
 #+BEGIN_SRC emacs-lisp
-(cla/install-from-elpa 'company)
-(setq company-dabbrev-downcase nil)
-(setq company-minimum-prefix-length 2)
-(setq company-idle-delay 0)
-(add-hook 'after-init-hook 'global-company-mode)
-(with-eval-after-load 'company
-  (diminish 'company-mode))
+  (cla/install-from-elpa 'company)
+  (setq company-dabbrev-downcase nil)
+  (setq company-minimum-prefix-length 2)
+  (setq company-idle-delay 0)
+  (add-hook 'after-init-hook 'global-company-mode)
+  (with-eval-after-load 'company
+    (diminish 'company-mode))
 #+END_SRC
 
 Company Box is a company frontend that supports icons
 
 #+BEGIN_SRC emacs-lisp
-(use-package-from-elpa company-box
-  :config (diminish 'company-box-mode)
-  :hook (company-mode . company-box-mode))
+  (use-package-from-elpa company-box
+    :config (diminish 'company-box-mode)
+    :hook (company-mode . company-box-mode))
 #+END_SRC
 
 *** LSP Mode
@@ -351,7 +348,7 @@ Finally we need Helm to interact with projectile
 
 #+BEGIN_SRC emacs-lisp
 (cla/install-from-elpa 'smart-mode-line)
-(setq sml/theme 'respectful)
+(setq sml/theme 'dark)
 (sml/setup)
 #+END_SRC
 

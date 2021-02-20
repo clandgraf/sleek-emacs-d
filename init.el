@@ -11,3 +11,7 @@
 (require 'cla-gitlab)
 
 (org-babel-load-file "~/.emacs.d/cla-conf/config.org")
+
+(defvar cla/local-settings-file "~/.emacs.d/emacs-local.el")
+(when (file-exists-p cla/local-settings-file)
+  (load cla/local-settings-file))
