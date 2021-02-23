@@ -22,6 +22,12 @@
 
 (org-babel-load-file "~/.emacs.d/cla-conf/config.org")
 
+;; ... and start up server if we're no daemon anyway
+
+(unless (daemonp)
+  (server-start))
+
+
 ;; emacs-local.el contains configuration that is local to this
 ;; site. This is not under version control
 

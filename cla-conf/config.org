@@ -210,7 +210,7 @@ file or directory at point in the same buffer.
 Let's ensure diminish is installed so we can use it later on.
 
 #+BEGIN_SRC emacs-lisp
-(cla/install-from-elpa 'diminish)
+  (cla/install-from-elpa 'diminish)
 #+END_SRC
 
 ** Random Stuff
@@ -218,20 +218,21 @@ Let's ensure diminish is installed so we can use it later on.
 Stuff that doesn't need much setup
 
 #+BEGIN_SRC emacs-lisp
-(cla/install-from-elpa 'htmlize)
-(cla/install-from-elpa 'markdown-mode)
-(cla/install-from-elpa 'magit)
+  (cla/install-from-elpa 'rg)
+  (cla/install-from-elpa 'htmlize)
+  (cla/install-from-elpa 'markdown-mode)
+  (cla/install-from-elpa 'magit)
 #+END_SRC
 
 ** Processing
 
 #+BEGIN_SRC emacs-lisp
-(setq processing-location
-      "c:/Users/chris/processing-3.5.3/processing-java.exe")
-(setq processing-application-dir
-      "c:/Users/chris/processing-3.5.3")
-(setq processing-sketchbook-dir
-      "c:/Users/chris/Documents/Processing")
+  (setq processing-location
+        "c:/Users/chris/processing-3.5.3/processing-java.exe")
+  (setq processing-application-dir
+        "c:/Users/chris/processing-3.5.3")
+  (setq processing-sketchbook-dir
+        "c:/Users/chris/Documents/Processing")
 #+END_SRC
 
 ** Global Utilies
@@ -241,21 +242,21 @@ Stuff that doesn't need much setup
 Highlight modified lines of code in files under version control
 
 #+BEGIN_SRC emacs-lisp
-(cla/install-from-elpa 'diff-hl)
-(add-hook 'after-init-hook 'global-diff-hl-mode)
+  (cla/install-from-elpa 'diff-hl)
+  (add-hook 'after-init-hook 'global-diff-hl-mode)
 #+END_SRC
 
 *** Smart Parens
 
 #+BEGIN_SRC emacs-lisp
-(cla/install-from-elpa 'smartparens)
-(with-eval-after-load 'smartparens
-  (diminish 'smartparens-mode))
-(require 'smartparens-config)
-(smartparens-global-mode)
-(show-smartparens-global-mode)
-;(sp-pair "'" nil :actions :rem)
-(global-set-key (kbd "C-.") 'sp-select-next-thing)
+  (cla/install-from-elpa 'smartparens)
+  (with-eval-after-load 'smartparens
+    (diminish 'smartparens-mode))
+  (require 'smartparens-config)
+  (smartparens-global-mode)
+  (show-smartparens-global-mode)
+  ;(sp-pair "'" nil :actions :rem)
+  (global-set-key (kbd "C-.") 'sp-select-next-thing)
 #+END_SRC
 
 *** Company Mode
@@ -276,8 +277,10 @@ Company Box is a company frontend that supports icons
 
 #+BEGIN_SRC emacs-lisp
   (use-package-from-elpa company-box
-    :config (diminish 'company-box-mode)
-    :hook (company-mode . company-box-mode))
+                         :config
+                         (diminish 'company-box-mode)
+                         :hook
+                         (company-mode . company-box-mode))
 #+END_SRC
 
 *** LSP Mode
@@ -292,64 +295,62 @@ Used for:
 *** Projectile
 
 #+BEGIN_SRC emacs-lisp
-(cla/install-from-elpa 'projectile)
-(projectile-global-mode)
-(setq projectile-mode-line-prefix " ")
-(global-set-key (kbd "C-c p f") 'projectile-find-file)
-(global-set-key (kbd "C-c p g") 'projectile-grep)
-(global-set-key (kbd "C-c p s") 'projectile-switch-project)
-(global-set-key (kbd "C-c p k") 'projectile-kill-buffers)
+  (cla/install-from-elpa 'projectile)
+  (projectile-global-mode)
+  (setq projectile-mode-line-prefix " ")
+  (global-set-key (kbd "C-c p f") 'projectile-find-file)
+  (global-set-key (kbd "C-c p g") 'projectile-grep)
+  (global-set-key (kbd "C-c p s") 'projectile-switch-project)
+  (global-set-key (kbd "C-c p k") 'projectile-kill-buffers)
 #+END_SRC
 
 Let's enable native indexing/no caching, if the system has git and fd
 this should be sufficiently efficient:
 
 #+BEGIN_SRC emacs-lisp
-(setq projectile-indexing-method 'alien)
-(setq projectile-enable-caching nil)
+  (setq projectile-indexing-method 'alien)
+  (setq projectile-enable-caching nil)
 #+END_SRC
 
 *** Helm
 
 #+BEGIN_SRC emacs-lisp
-(cla/install-from-elpa 'helm)
-(require 'helm-config)
-(helm-mode 1)
+  (cla/install-from-elpa 'helm)
+  (require 'helm-config)
+  (helm-mode 1)
 #+END_SRC
 
-We want our Helm Buffer to always open in the bottom
-part of the window we're in.
-
-This makes it rather predictable.
+We want our Helm Buffer to always open in the bottom part of the
+window we're in. This makes it rather predictable.
 
 #+BEGIN_SRC emacs-lisp
-(setq helm-split-window-in-side-p t)
-(setq helm-split-window-default-side 'below)
+  (setq helm-split-window-in-side-p t)
+  (setq helm-split-window-default-side 'below)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(with-eval-after-load "helm-config"
-  (global-set-key (kbd "C-x C-f") #'helm-find-files)
-  (global-set-key (kbd "M-x") #'helm-M-x)
-  (define-key helm-find-files-map "\t" 'helm-execute-persistent-action)
-  (define-key helm-read-file-map "\t" 'helm-execute-persistent-action)
-  (diminish 'helm-mode))
+  (with-eval-after-load "helm-config"
+    (global-set-key (kbd "C-x C-f") #'helm-find-files)
+    (global-set-key (kbd "M-x") #'helm-M-x)
+    (define-key helm-find-files-map "\t" 'helm-execute-persistent-action)
+    (define-key helm-read-file-map "\t" 'helm-execute-persistent-action)
+    (diminish 'helm-mode))
 #+END_SRC
 
 Finally we need Helm to interact with projectile
 
 #+BEGIN_SRC emacs-lisp
-(cla/install-from-elpa 'helm-projectile)
-(require 'helm-projectile)
-(helm-projectile-on)
+  (use-package-from-elpa helm-projectile
+                         :config
+                         (helm-projectile-on))
 #+END_SRC
 
 *** Smart Mode Line
 
 #+BEGIN_SRC emacs-lisp
-(cla/install-from-elpa 'smart-mode-line)
-(setq sml/theme 'dark)
-(sml/setup)
+  (cla/install-from-elpa 'smart-mode-line)
+  (setq sml/theme 'dark)
+  (sml/setup)
 #+END_SRC
 
 *** COMMENT Flycheck
@@ -369,32 +370,32 @@ Finally we need Helm to interact with projectile
 
 Some minor major-modes (lol) for common formats
 
-#+BEGIN_SRC
-(cla/install-from-elpa 'yaml-mode)
-(cla/install-from-elpa 'mustache-mode)
-(require 'mustache-mode)
+#+BEGIN_SRC emacs-lisp
+  (cla/install-from-elpa 'yaml-mode)
+  (cla/install-from-elpa 'mustache-mode)
+  (require 'mustache-mode)
 #+END_SRC
 
 I think for Javascript/JSX based types I should replace this RJSX.
 
 #+BEGIN_SRC emacs-lisp
-(cla/install-from-elpa 'web-mode)
-(cla/install-from-elpa 'rjsx-mode)
+  (cla/install-from-elpa 'web-mode)
+  (cla/install-from-elpa 'rjsx-mode)
 
-(dolist (suffix '("\\.js\\'" "\\.jsx\\'"))
-  (add-to-list 'auto-mode-alist `(,suffix . rjsx-mode)))
+  (dolist (suffix '("\\.js\\'" "\\.jsx\\'"))
+    (add-to-list 'auto-mode-alist `(,suffix . rjsx-mode)))
 
-(dolist (suffix '("\\.tsx\\'" "\\.ts\\'" "\\.json\\'" "\\.html\\'" "\\.css\\'"))
-  (add-to-list 'auto-mode-alist `(,suffix . web-mode)))
+  (dolist (suffix '("\\.tsx\\'" "\\.ts\\'" "\\.json\\'" "\\.html\\'" "\\.css\\'"))
+    (add-to-list 'auto-mode-alist `(,suffix . web-mode)))
 
-(dolist (suffix '("\\.scss\\'"))
-  (add-to-list 'auto-mode-alist `(,suffix . scss-mode)))
+  (dolist (suffix '("\\.scss\\'"))
+    (add-to-list 'auto-mode-alist `(,suffix . scss-mode)))
 #+END_SRC
 
 Customize indentation
 
 #+BEGIN_SRC emacs-lisp
-(setq sgml-basic-offset 4)
+  (setq sgml-basic-offset 4)
 #+END_SRC
 
 TODO I should check RJSX for Typescript.
