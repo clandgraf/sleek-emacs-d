@@ -99,23 +99,23 @@ second time, after package initialization.
 ** Sane Code Formatting
 
 #+BEGIN_SRC emacs-lisp
-(setq-default indent-tabs-mode nil) ; never insert tabs
-(setq-default tab-width 4)          ; always indent 4 spaces
-(setq-default c-basic-offset 4)     ; c-mode indent 4 spaces
-(add-hook 'before-save-hook         ; on save remove trailing whitespace
-          'delete-trailing-whitespace)
-(set-language-environment "UTF-8")
-(setq default-buffer-file-coding-system 'utf-8-unix)
+  (setq-default indent-tabs-mode nil) ; never insert tabs
+  (setq-default tab-width 4)          ; always indent 4 spaces
+  (setq-default c-basic-offset 4)     ; c-mode indent 4 spaces
+  (add-hook 'before-save-hook         ; on save remove trailing whitespace
+            'delete-trailing-whitespace)
+  (set-language-environment "UTF-8")
+  (setq default-buffer-file-coding-system 'utf-8-unix)
 #+END_SRC
 
 ** Visual Bell
 
 #+BEGIN_SRC emacs-lisp
-(setq visible-bell nil
-      ring-bell-function 'flash-mode-line)
-(defun flash-mode-line ()
-  (invert-face 'mode-line)
-  (run-with-timer 0.1 nil #'invert-face 'mode-line))
+  (setq visible-bell nil
+        ring-bell-function 'flash-mode-line)
+  (defun flash-mode-line ()
+    (invert-face 'mode-line)
+    (run-with-timer 0.1 nil #'invert-face 'mode-line))
 #+END_SRC
 
 ** Clean Directories
@@ -123,52 +123,55 @@ second time, after package initialization.
 Disable emacs to auto-create files when editing
 
 #+BEGIN_SRC emacs-lisp
-(setq make-backup-files nil) ; stop creating backup~ files
-(setq auto-save-default nil) ; stop creating #autosave# files
+  (setq make-backup-files nil) ; stop creating backup~ files
+  (setq auto-save-default nil) ; stop creating #autosave# files
 #+END_SRC
 
 ** Keychords
 
 windmove is bound to meta, so we can move between adjacent
 windows using Alt+Arrow Keys, instead of C-x o. Note that this
-collides with default org-mode keys.
+collides with default org-mode keys, so first unbind those.
+
+#+BEGIN_SRC emacs-lisp
+  (define-key org-mode-map (kbd "<M-up>") nil)
+  (define-key org-mode-map (kbd "<M-down>") nil)
+  (define-key org-mode-map (kbd "<M-left>") nil)
+  (define-key org-mode-map (kbd "<M-right>") nil)
+#+END_SRC
+
+tmux-windmove provides replacements for windmove-* functions.
+When there is no window in the direction we're moving this will
+use tmux select-pane to select the next pane in that direction.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'tmux-windmove)
+  (tmux/windmove-meta-binding)
+#+END_SRC
+
+In order to really work the corresponding part is found in dotfiles:
+This contains tmux-configuration to redirect M-<arrow> events to
+emacs, if the current pane is running in emacs.
 
 The other key bindings resize the current window using
 the arrow keys and Shift+Alt. Useful if you need to see more.
 
-#+BEGIN_SRC emacs-lisp
-(windmove-default-keybindings 'meta)
-
-(define-key org-mode-map (kbd "<M-up>") nil)
-(define-key org-mode-map (kbd "<M-down>") nil)
-(define-key org-mode-map (kbd "<M-left>") nil)
-(define-key org-mode-map (kbd "<M-right>") nil)
-
-(global-set-key (kbd "S-M-<up>") 'enlarge-window)
-(global-set-key (kbd "S-M-<down>") 'shrink-window)
-(global-set-key (kbd "S-M-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "S-M-<right>") 'enlarge-window-horizontally)
+#+BEGIN_SRC
+  (global-set-key (kbd "S-M-<up>") 'enlarge-window)
+  (global-set-key (kbd "S-M-<down>") 'shrink-window)
+  (global-set-key (kbd "S-M-<left>") 'shrink-window-horizontally)
+  (global-set-key (kbd "S-M-<right>") 'enlarge-window-horizontally)
 #+END_SRC
 
 cla/switch-to-other-buffer is useful when editing two files
 in one buffer, for example source/header file.
 
 #+BEGIN_SRC emacs-lisp
-(defun cla/switch-to-other-buffer ()
-  (interactive)
-  (switch-to-buffer (other-buffer (current-buffer))))
+  (defun cla/switch-to-other-buffer ()
+    (interactive)
+    (switch-to-buffer (other-buffer (current-buffer))))
 
-(global-set-key (kbd "M-]") 'cla/switch-to-other-buffer)
-#+END_SRC
-
-TODO what to do about those??
-
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "H-<left>") 'previous-buffer)
-(global-set-key (kbd "H-<right>") 'next-buffer)
-(global-set-key (kbd "<triple-wheel-right>") 'previous-buffer)
-(global-set-key (kbd "<triple-wheel-left>") 'next-buffer)
-(global-set-key (kbd "H-<tab>") 'other-frame)
+  (global-set-key (kbd "M-]") 'cla/switch-to-other-buffer)
 #+END_SRC
 
 This makes home/C-a navigate back to indentation or if
@@ -176,13 +179,13 @@ already at indentation col 0, which is more in line with modern
 editors.
 
 #+BEGIN_SRC emacs-lisp
-(defun cla/back-to-indentation-or-beginning ()
-  (interactive)
-  (if (= (point) (progn (back-to-indentation) (point)))
-      (beginning-of-line)))
+  (defun cla/back-to-indentation-or-beginning ()
+    (interactive)
+    (if (= (point) (progn (back-to-indentation) (point)))
+        (beginning-of-line)))
 
-(global-set-key (kbd "C-a") 'cla/back-to-indentation-or-beginning)
-(global-set-key (kbd "<home>") 'cla/back-to-indentation-or-beginning)
+  (global-set-key (kbd "C-a") 'cla/back-to-indentation-or-beginning)
+  (global-set-key (kbd "<home>") 'cla/back-to-indentation-or-beginning)
 #+END_SRC
 
 *** Error Navigation
