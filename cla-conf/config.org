@@ -105,7 +105,7 @@ second time, after package initialization.
   (add-hook 'before-save-hook         ; on save remove trailing whitespace
             'delete-trailing-whitespace)
   (set-language-environment "UTF-8")
-  (setq default-buffer-file-coding-system 'utf-8-unix)
+  (setq-default buffer-file-coding-system 'utf-8-unix)
 #+END_SRC
 
 ** Visual Bell
