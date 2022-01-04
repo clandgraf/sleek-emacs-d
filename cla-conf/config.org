@@ -11,6 +11,14 @@ Should be in after-init-hook?
 
 ** Clean UI
 
+Initial Frame size is a bit small for modern screens
+
+#+BEGIN_SRC emacs-lisp
+  (setq default-frame-alist
+    '((width . 120)
+      (height . 50)))
+#+END_SRC
+
 Remove all those noobish frame decorations. First two are only
 available when running on a graphical display.
 
@@ -50,7 +58,7 @@ second time, after package initialization.
 ** Font Setup
 
 #+BEGIN_SRC emacs-lisp
-  (defvar cla/font-family         "Source Code Pro")
+  (defvar cla/font-family         "SauceCodePro NF")
   (defvar cla/font-height-default 100)
   (defvar cla/font-height-large   110)
 
@@ -195,8 +203,24 @@ grepping. These bindings are comfortably reached with the right hand
 when using an ansi layout:
 
 #+BEGIN_SRC emacs-lisp
-;(global-set-key (kbd "M-[") 'previous-error)
-;(global-set-key (kbd "M-]") 'next-error)
+(global-set-key (kbd "M-[") 'previous-error)
+(global-set-key (kbd "M-]") 'next-error)
+#+END_SRC
+
+** Search
+
+#+BEGIN_SRC emacs-list
+
+  (rg-define-search rg-query-project-dir
+    "Search for thing at point in files matching the current file
+  under the current directory."
+    :query ask
+    :format literal
+    :files current
+    :dir project)
+
+  (global-set-key (kbd "C-S-<f3>") 'rg-query-project-dir)
+  (global-set-key (kbd "C-<f3>") 'rg-dwim-project-dir)
 #+END_SRC
 
 ** Dired

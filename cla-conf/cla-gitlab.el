@@ -11,7 +11,8 @@
 
 (defun cla/--remove-trailing-dotgit (path)
   (if (string-match "\\.git$" path)
-      (replace-match "" nil nil path)))
+      (replace-match "" nil nil path)
+    path))
 
 (defun cla/get-gitlab-file ()
   (let ((remote (cla/git-remote))
@@ -23,16 +24,16 @@
             path
             (line-number-at-pos))))
 
-(defun cla/view-gitlab-file ()
+(defun cla/view-vc-file ()
   (interactive)
   (browse-url
-   (cla/get-gitlab-file)))
+   (cla/get-vc-file)))
 
-(defun cla/copy-gitlab-file-to-clipboard ()
+(defun cla/copy-vc-file-to-clipboard ()
   (interactive)
-  (let ((gitlab-url (cla/get-gitlab-file)))
-    (kill-new gitlab-url)
-    (message "Copied '%s' to the clipboard." gitlab-url)))
+  (let ((file-url (cla/get-vc-file)))
+    (kill-new file-url)
+    (message "Copied '%s' to the clipboard." file-url)))
 
 (defun cla/copy-gitlab-file-to-clipboard-md ()
   (interactive)
@@ -40,8 +41,23 @@
     (kill-new gitlab-url)
     (message "Copied '%s' to the clipboard." gitlab-url)))
 
-(global-set-key (kbd "<f8>") 'cla/copy-gitlab-file-to-clipboard)
+(defun cla/get-svn-url ()
+  (substring (shell-command-to-string "svn info --show-item url") 0 -1))
+
+(defun cla/get-svn-file ()
+  (format (concat (replace-regexp-in-string "/svn/" "/viewvc/" (cla/get-svn-url))
+                  "/"
+                  (file-name-nondirectory buffer-file-name)
+                  "?view=markup#l%s")
+          (line-number-at-pos)))
+
+(defun cla/get-vc-file ()
+  (let ((type (vc-backend buffer-file-name)))
+    (cond ((string-equal type "SVN") (cla/get-svn-file))
+          ((string-equal type "Git") (cla/get-gitlab-file)))))
+
+(global-set-key (kbd "<f8>") 'cla/copy-vc-file-to-clipboard)
 (global-set-key (kbd "M-<f8>") 'cla/copy-gitlab-file-to-clipboard-md)
-(global-set-key (kbd "C-<f8>") 'cla/view-gitlab-file)
+(global-set-key (kbd "C-<f8>") 'cla/view-vc-file)
 
 (provide 'cla-gitlab)

@@ -4,3 +4,4 @@
 !init.el
 !/cla-conf/**
 /cla-conf/config.el
+!/ceel

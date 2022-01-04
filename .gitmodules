@@ -1,0 +1,3 @@
+[submodule "ceel"]
+	path = ceel
+	url = https://gitlab.contact.de/cla/ceel.git

@@ -13,6 +13,8 @@
 ;; Load some custom packages
 
 (add-to-list 'load-path "~/.emacs.d/cla-conf")
+(when (file-exists-p "~/.emacs.d/ceel")
+  (add-to-list 'load-path "~/.emacs.d/ceel"))
 
 (require 'cla-filehandling)
 (require 'cla-gitlab)
