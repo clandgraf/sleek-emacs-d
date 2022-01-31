@@ -209,8 +209,7 @@ when using an ansi layout:
 
 ** Search
 
-#+BEGIN_SRC emacs-list
-
+#+BEGIN_SRC emacs-lisp
   (rg-define-search rg-query-project-dir
     "Search for thing at point in files matching the current file
   under the current directory."
