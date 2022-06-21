@@ -203,9 +203,15 @@ grepping. These bindings are comfortably reached with the right hand
 when using an ansi layout:
 
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "M-[") 'previous-error)
-(global-set-key (kbd "M-]") 'next-error)
+;(global-set-key (kbd "M-[") 'previous-error)
+;(global-set-key (kbd "M-]") 'next-error)
 #+END_SRC
+
+Note: the escape code of "M-[" is the prefix of many Meta-Escape
+Codes, e.g. "M-ArrowKeys" and xterm mouse mode.
+Disabling this, so we can use all these inputs on terminal.
+TODO how can we en-/disable these based on frame?
+Global minor mode that is toggled when we switch frames?
 
 ** Search
 
