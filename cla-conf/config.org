@@ -11,6 +11,27 @@ Should be in after-init-hook?
 
 ** Clean UI
 
+Hack for running emacs in Windows Terminal + SSH to Linux
+Box. Ctrl+Space doesn't work for set-mark command so we send a weird
+combo.
+
+#+BEGIN_SRC js
+{
+  "command": {
+    "action": "sendInput",
+    "input": "\u001b[9~"
+  },
+  "keys": "ctrl+space"
+}
+#+END_SRC
+
+Insert the above command in Windows Terminal, and the below binding
+will do the trick:
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key "\e[9~" 'set-mark-command)
+#+END_SRC
+
 Initial Frame size is a bit small for modern screens
 
 #+BEGIN_SRC emacs-lisp
