@@ -216,15 +216,15 @@ Global minor mode that is toggled when we switch frames?
 ** Search
 
 #+BEGIN_SRC emacs-lisp
-  (rg-define-search rg-query-project-dir
-    "Search for thing at point in files matching the current file
-  under the current directory."
-    :query ask
-    :format literal
-    :files current
-    :dir project)
+;  (rg-define-search rg-query-project-dir
+;    "Search for thing at point in files matching the current file
+;  under the current directory."
+;    :query ask
+;    :format literal
+;    :files current
+;    :dir project)
 
-  (global-set-key (kbd "C-S-<f3>") 'rg-query-project-dir)
+;  (global-set-key (kbd "C-S-<f3>") 'rg-query-project-dir)
   (global-set-key (kbd "C-<f3>") 'rg-dwim-project-dir)
 #+END_SRC
 
@@ -348,7 +348,8 @@ this should be sufficiently efficient:
 
 #+BEGIN_SRC emacs-lisp
   (cla/install-from-elpa 'helm)
-  (require 'helm-config)
+  ; (require 'helm-config)
+  (require 'helm)
   (helm-mode 1)
 #+END_SRC
 
@@ -361,7 +362,7 @@ window we're in. This makes it rather predictable.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (with-eval-after-load "helm-config"
+  (with-eval-after-load "helm"
     (global-set-key (kbd "C-x C-f") #'helm-find-files)
     (global-set-key (kbd "M-x") #'helm-M-x)
     (define-key helm-find-files-map "\t" 'helm-execute-persistent-action)
