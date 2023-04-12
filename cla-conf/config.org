@@ -9,7 +9,20 @@ Should be in after-init-hook?
 
 * Before everything else
 
-** Clean UI
+** Terminal-Specific Stuff
+
+Scrolling did not work out of the box, when using emacs inside tmux,
+but the frame receives mouse events, so bind the correct commands
+manually.
+
+TODO Scroll Amount seems to be a bit much, can we customize that?
+
+#+BEGIN_SRC emacs-lisp
+(defvar cla/term-scroll-amount 5)
+(unless (display-graphic-p)
+  (global-set-key (kbd "<mouse-4>") (lambda () (interactive) (scroll-down-command cla/term-scroll-amount)))
+  (global-set-key (kbd "<mouse-5>") (lambda () (interactive) (scroll-up-command cla/term-scroll-amount))))
+#+END_SRC
 
 Hack for running emacs in Windows Terminal + SSH to Linux
 Box. Ctrl+Space doesn't work for set-mark command so we send a weird
@@ -31,6 +44,8 @@ will do the trick:
 #+BEGIN_SRC emacs-lisp
   (global-set-key "\e[9~" 'set-mark-command)
 #+END_SRC
+
+** Clean UI
 
 Initial Frame size is a bit small for modern screens
 
