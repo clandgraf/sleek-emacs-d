@@ -45,6 +45,28 @@ will do the trick:
   (global-set-key "\e[9~" 'set-mark-command)
 #+END_SRC
 
+Next enable emacs to kill to tmux clipboard, (TODO) this ideally
+should have a check, wether this is running in tmux context i guess.
+
+#+BEGIN_SRC emacs-lisp
+(defun cla/kill-to-tmux (s)
+  (shell-command (format "tmux set-buffer \"%s\"" s)))
+
+(defun cla/gui-select-text (s)
+  (cla/kill-to-tmux s)
+  (gui-select-text s))
+
+(setq interprogram-cut-function 'cla/gui-select-text)
+#+END_SRC
+
+** Daemon Setup
+#+BEGIN_SRC emacs-lisp
+  (cla/install-from-elpa 'exec-path-from-shell)
+  (when (daemonp)
+    (exec-path-from-shell-initialize))
+#+END_SRC
+
+
 ** Clean UI
 
 Initial Frame size is a bit small for modern screens
