@@ -2,6 +2,15 @@
 ;; TODO skip when frame is not in tmux context
 ;; TODO Issue when going down --> minibuffer
 
+;; This works together with
+;; https://github.com/clandgraf/dotfiles/blob/master/tmux.conf and
+;; https://github.com/clandgraf/tmux-utils. tmux' bindings invoke the
+;; tmux-send-or command which will send the M-bindings to emacs if
+;; emacs is in the active pane.  Else it will run a select-pane
+;; command.  Emacs on the other hand tries to do a windmove action
+;; based on the sent keys. If this fails, it means there is no window
+;; in that direction so we can move to the next tmux pane
+
 (defun tmux/tmux-frame-p ()
   (getenv "TMUX" (selected-frame)))
 

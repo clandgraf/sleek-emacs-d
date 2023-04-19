@@ -1,5 +1,6 @@
 #+TITLE: Emacs Configuration
 #+OPTIONS: toc:nil
+#+STARTUP: showall
 
 * Offene Punkte
 
@@ -42,7 +43,7 @@ Insert the above command in Windows Terminal, and the below binding
 will do the trick:
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key "\e[9~" 'set-mark-command)
+(global-set-key "\e[9~" 'set-mark-command)
 #+END_SRC
 
 Next enable emacs to kill to tmux clipboard, (TODO) this ideally
@@ -58,14 +59,6 @@ should have a check, wether this is running in tmux context i guess.
 
 (setq interprogram-cut-function 'cla/gui-select-text)
 #+END_SRC
-
-** Daemon Setup
-#+BEGIN_SRC emacs-lisp
-  (cla/install-from-elpa 'exec-path-from-shell)
-  (when (daemonp)
-    (exec-path-from-shell-initialize))
-#+END_SRC
-
 
 ** Clean UI
 
@@ -144,15 +137,20 @@ second time, after package initialization.
     (unless (package-installed-p package)
       (package-install package)))
 
-  (defmacro use-package-from-elpa (pkg &rest body)
-    `(progn
-       (cla/install-from-elpa (quote ,pkg))
-       (use-package ,pkg ,@body)))
-
   (cla/install-from-elpa 'use-package)
 #+END_SRC
 
 * General setup
+
+** Daemon Setup
+
+#+BEGIN_SRC emacs-lisp
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (daemonp)
+    (exec-path-from-shell-initialize)))
+#+END_SRC
 
 ** Theme Setup II
 
@@ -332,8 +330,12 @@ Stuff that doesn't need much setup
 Highlight modified lines of code in files under version control
 
 #+BEGIN_SRC emacs-lisp
-  (cla/install-from-elpa 'diff-hl)
-  (add-hook 'after-init-hook 'global-diff-hl-mode)
+(use-package diff-hl
+  :ensure t
+  :defer 2
+  :config
+  (global-diff-hl-mode)
+  (diff-hl-margin-mode))
 #+END_SRC
 
 *** Smart Parens
@@ -366,11 +368,12 @@ Basic Company Setup
 Company Box is a company frontend that supports icons
 
 #+BEGIN_SRC emacs-lisp
-  (use-package-from-elpa company-box
-                         :config
-                         (diminish 'company-box-mode)
-                         :hook
-                         (company-mode . company-box-mode))
+(use-package company-box
+  :ensure t
+  :config
+  (diminish 'company-box-mode)
+  :hook
+  (company-mode . company-box-mode))
 #+END_SRC
 
 *** LSP Mode
@@ -431,9 +434,10 @@ window we're in. This makes it rather predictable.
 Finally we need Helm to interact with projectile
 
 #+BEGIN_SRC emacs-lisp
-  (use-package-from-elpa helm-projectile
-                         :config
-                         (helm-projectile-on))
+(use-package helm-projectile
+  :ensure t
+  :config
+  (helm-projectile-on))
 #+END_SRC
 
 *** Smart Mode Line
