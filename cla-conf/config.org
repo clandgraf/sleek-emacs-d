@@ -84,6 +84,15 @@ available when running on a graphical display.
   (xterm-mouse-mode)
 #+END_SRC
 
+On TTYs we want a nice vertical border:
+
+#+BEGIN_SRC emacs-lisp
+(let ((display-table (or standard-display-table (make-display-table))))
+  (set-display-table-slot display-table 'vertical-border (make-glyph-code ?│))
+  (set)
+  (setq standard-display-table display-table))
+#+END_SRC
+
 ** Theme Setup I
 
 #+BEGIN_SRC emacs-lisp
