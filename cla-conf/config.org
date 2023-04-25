@@ -46,12 +46,13 @@ will do the trick:
 (global-set-key "\e[9~" 'set-mark-command)
 #+END_SRC
 
-Next enable emacs to kill to tmux clipboard, (TODO) this ideally
-should have a check, wether this is running in tmux context i guess.
+Next enable emacs to kill to tmux clipboard,
+TODO this ideally should have a check, wether
+     this is running in tmux context i guess.
 
 #+BEGIN_SRC emacs-lisp
 (defun cla/kill-to-tmux (s)
-  (shell-command (format "tmux set-buffer \"%s\"" s)))
+  (call-process "/usr/bin/tmux" nil nil nil "set-buffer" s))
 
 (defun cla/gui-select-text (s)
   (cla/kill-to-tmux s)
