@@ -46,6 +46,13 @@ will do the trick:
 (global-set-key "\e[9~" 'set-mark-command)
 #+END_SRC
 
+C-<f1> to C-<f4> seem to not work smh, resolve this.
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "\e[1;5r")
+                (lambda () (interactive) (funcall (global-key-binding (kbd "C-<f3>")))))
+#+END_SRC
+
 Next enable emacs to kill to tmux clipboard,
 TODO this ideally should have a check, wether
      this is running in tmux context i guess.
@@ -119,20 +126,9 @@ second time, after package initialization.
 
 #+BEGIN_SRC emacs-lisp
   (defvar cla/font-family         "SauceCodePro NF")
-  (defvar cla/font-height-default 100)
-  (defvar cla/font-height-large   110)
-
-  (defun cla/set-default-font ()
-    (interactive)
-    (set-face-attribute 'default nil
-                        :family cla/font-family :height cla/font-height-default))
-
-  (defun cla/set-large-font ()
-    (interactive)
-    (set-face-attribute 'default nil
-                        :family cla/font-family :height cla/font-height-large))
-
-  (cla/set-large-font)
+  (defvar cla/font-height-default 110)
+  (set-face-attribute 'default nil
+                      :family cla/font-family :height cla/font-height-default)
 #+END_SRC
 
 * Setup package.el + use-package
@@ -268,8 +264,8 @@ grepping. These bindings are comfortably reached with the right hand
 when using an ansi layout:
 
 #+BEGIN_SRC emacs-lisp
-;(global-set-key (kbd "M-[") 'previous-error)
-;(global-set-key (kbd "M-]") 'next-error)
+(global-set-key (kbd "C-<prior>") 'previous-error)
+(global-set-key (kbd "C-<next>") 'next-error)
 #+END_SRC
 
 Note: the escape code of "M-[" is the prefix of many Meta-Escape
