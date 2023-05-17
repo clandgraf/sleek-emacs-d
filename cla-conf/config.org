@@ -316,7 +316,22 @@ Stuff that doesn't need much setup
   (cla/install-from-elpa 'rg)
   (cla/install-from-elpa 'htmlize)
   (cla/install-from-elpa 'markdown-mode)
+#+END_SRC
+
+** Magit
+
+#+BEGIN_SRC emacs-lisp
   (cla/install-from-elpa 'magit)
+#+END_SRC
+
+Function to open magit-status in the selected window. Use in
+combination with emacsclient -c to open magit-status from shell.
+
+#+BEGIN_SRC emacs-lisp
+  (defun cla/magit-status-same-window ()
+    (let ((magit-display-buffer-function (lambda (buffer)
+                                           (display-buffer buffer '(display-buffer-same-window)))))
+      (magit-status)))
 #+END_SRC
 
 ** Processing
