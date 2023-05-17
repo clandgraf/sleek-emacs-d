@@ -1,7 +1,15 @@
 ;; -*- lexical-binding: t -*-
 
+(defun cla/--git-url->http-url (git-url)
+  (if (string-match "^git@\\([^:]*\\):\\(.*\\)" git-url)
+      (let ((host (match-string 1 git-url))
+            (path (match-string 2 git-url)))
+        (format "https://%s/%s" host path))
+    git-url))
+
 (defun cla/git-remote ()
-  (substring (shell-command-to-string "git config --get remote.origin.url") 0 -1))
+  (let ((remote (substring (shell-command-to-string "git config --get remote.origin.url") 0 -1)))
+    (cla/--git-url->http-url remote)))
 
 (defun cla/git-branch ()
   (substring (shell-command-to-string "git rev-parse --abbrev-ref HEAD") 0 -1))
