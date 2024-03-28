@@ -427,6 +427,8 @@ Used for:
   (global-set-key (kbd "C-c p g") 'projectile-grep)
   (global-set-key (kbd "C-c p s") 'projectile-switch-project)
   (global-set-key (kbd "C-c p k") 'projectile-kill-buffers)
+  (global-set-key (kbd "<f9>") 'projectile-switch-project)
+  (global-set-key (kbd "<f10>") 'projectile-find-file)
 #+END_SRC
 
 Let's enable native indexing/no caching, if the system has git and fd
