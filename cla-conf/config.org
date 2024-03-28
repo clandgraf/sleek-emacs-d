@@ -19,10 +19,20 @@ manually.
 TODO Scroll Amount seems to be a bit much, can we customize that?
 
 #+BEGIN_SRC emacs-lisp
-(defvar cla/term-scroll-amount 5)
-(unless (display-graphic-p)
-  (global-set-key (kbd "<mouse-4>") (lambda () (interactive) (scroll-down-command cla/term-scroll-amount)))
-  (global-set-key (kbd "<mouse-5>") (lambda () (interactive) (scroll-up-command cla/term-scroll-amount))))
+  (unless (display-graphic-p)
+    (defmacro cla/window-frac (frac) `(/ (window-total-height) ,frac))
+    (global-set-key (kbd "<mouse-4>") (lambda ()
+                                        (interactive)
+                                        (scroll-down-command (cla/window-frac 10))))
+    (global-set-key (kbd "<mouse-5>") (lambda ()
+                                        (interactive)
+                                        (scroll-up-command (cla/window-frac 10))))
+    (global-set-key (kbd "<prior>") (lambda ()
+                                      (interactive)
+                                      (scroll-down-command (cla/window-frac 2))))
+    (global-set-key (kbd "<next>") (lambda ()
+                                     (interactive)
+                                     (scroll-up-command (cla/window-frac 2)))))
 #+END_SRC
 
 Hack for running emacs in Windows Terminal + SSH to Linux
