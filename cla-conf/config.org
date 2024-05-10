@@ -141,7 +141,7 @@ second time, after package initialization.
 ** Font Setup
 
 #+BEGIN_SRC emacs-lisp
-  (defvar cla/font-family         "SauceCodePro NF")
+  (defvar cla/font-family "SauceCodePro NF")
   (defvar cla/font-height-default 110)
   (set-face-attribute 'default nil
                       :family cla/font-family :height cla/font-height-default)
@@ -558,19 +558,3 @@ Customize indentation
 #+END_SRC
 
 TODO I should check RJSX for Typescript.
-
-* Slime
-
-#+BEGIN_SRC emacs-lisp
-; (cla/install-from-elpa 'slime)
-; (cla/install-from-elpa 'slime-company)
-; (setq slime-contribs '(slime-fancy slime-company))
-; (setq inferior-lisp-program "/data/data/com.termux/files/home/ecl/bin/ecl")
-#+END_SRC
-
-* Rust
-
-#+BEGIN_SRC emacs-lisp
-;(cla/install-from-elpa 'rust-mode)
-;(add-hook rust-mode-hook #'lsp)
-#+END_SRC
