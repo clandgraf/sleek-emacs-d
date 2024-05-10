@@ -293,16 +293,8 @@ Global minor mode that is toggled when we switch frames?
 ** Search
 
 #+BEGIN_SRC emacs-lisp
-;  (rg-define-search rg-query-project-dir
-;    "Search for thing at point in files matching the current file
-;  under the current directory."
-;    :query ask
-;    :format literal
-;    :files current
-;    :dir project)
-
-;  (global-set-key (kbd "C-S-<f3>") 'rg-query-project-dir)
   (global-set-key (kbd "C-<f3>") 'rg-dwim-project-dir)
+  (global-set-key (kbd "C-S-<f3>") 'rg-project)
 #+END_SRC
 
 ** Dired
