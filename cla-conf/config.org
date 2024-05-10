@@ -56,12 +56,14 @@ will do the trick:
 (global-set-key "\e[9~" 'set-mark-command)
 #+END_SRC
 
-C-<f1> to C-<f4> seem to not work smh, resolve this.
+# C-<f1> to C-<f4> seem to not work smh, resolve this.
 
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "\e[1;5r")
-                (lambda () (interactive) (funcall (global-key-binding (kbd "C-<f3>")))))
-#+END_SRC
+# #+BEGIN_SRC emacs-lisp
+# (global-set-key (kbd "\e[1;5r")
+#                 (lambda () (interactive) (funcall (global-key-binding (kbd "C-<f3>")))))
+# (global-set-key (kbd "\e[1;5S")
+#                 (lambda () (interactive) (funcall (global-key-binding (kbd "C-<f4>")))))
+# #+END_SRC
 
 Next enable emacs to kill to tmux clipboard,
 TODO this ideally should have a check, wether
