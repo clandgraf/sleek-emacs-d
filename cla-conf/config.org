@@ -319,7 +319,8 @@ file or directory at point in the same buffer.
 Let's ensure diminish is installed so we can use it later on.
 
 #+BEGIN_SRC emacs-lisp
-  (cla/install-from-elpa 'diminish)
+  (use-package diminish
+    :ensure t)
 #+END_SRC
 
 ** Random Stuff
@@ -327,15 +328,21 @@ Let's ensure diminish is installed so we can use it later on.
 Stuff that doesn't need much setup
 
 #+BEGIN_SRC emacs-lisp
-  (cla/install-from-elpa 'rg)
-  (cla/install-from-elpa 'htmlize)
-  (cla/install-from-elpa 'markdown-mode)
+  (use-package rg
+    :ensure t)
+  (use-package htmlize
+    :ensure t)
+  (use-package markdown-mode
+    :ensure t
+    :bind (("C-c i c" . markdown-insert-change-request)
+           ("C-c i p" . markdown-insert-person)))
 #+END_SRC
 
 ** Magit
 
 #+BEGIN_SRC emacs-lisp
-  (cla/install-from-elpa 'magit)
+  (use-package magit
+    :ensure t)
 #+END_SRC
 
 Function to open magit-status in the selected window. Use in
@@ -366,14 +373,14 @@ Highlight modified lines of code in files under version control
 *** Smart Parens
 
 #+BEGIN_SRC emacs-lisp
-  (cla/install-from-elpa 'smartparens)
-  (with-eval-after-load 'smartparens
-    (diminish 'smartparens-mode))
-  (require 'smartparens-config)
-  (smartparens-global-mode)
-  (show-smartparens-global-mode)
-  ;(sp-pair "'" nil :actions :rem)
-  (global-set-key (kbd "C-.") 'sp-select-next-thing)
+  (use-package 'smartparens
+    :ensure t
+    :diminish smartparens-mode
+    :config (progn
+              (require 'smartparens-config)
+              (smartparens-global-mode)
+              (show-smartparens-global-mode)
+              (global-set-key (kbd "C-.") 'sp-select-next-thing)))
 #+END_SRC
 
 *** Company Mode
@@ -486,6 +493,36 @@ Finally we need Helm to interact with projectile
   ;; (setq-default flycheck-disabled-checkers '(c/c++-gcc c/c++-clang javascript-jshint))
   ;; (add-hook 'after-init-hook #'global-flycheck-mode)
   ;; (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
+#+END_SRC
+
+* CEDM
+
+** Working with Change Requests
+
+#+BEGIN_SRC
+(defconst cla/markdown-insert-cr-command
+  "ceget cdberror %s | jq -r '.[] | [.[\"system:description\"], .[\"system:ui_link\"]] | \"[\\(.[0])](\\(.[1]))\"'")
+
+(defun markdown-insert-change-request (cr)
+  (interactive
+   (list (read-string "Change Request ID: ")))
+  (if (not (string-match-p "^E[0-9]\\{6\\}$" cr))
+      (error "'%s' is no valid Change Reques  ID."))
+  (insert
+   (string-trim-right
+    (shell-command-to-string
+     (format cla/markdown-insert-cr-command cr)))))
+
+(defconst cla/markdown-insert-person-command
+  "ceget person %s | jq -r '.[0][\"system:description\"]'")
+
+(defun markdown-insert-person (person)
+  (interactive
+   (list (read-string "Person ID: ")))
+  (insert
+   (string-trim-right
+    (shell-command-to-string
+     (format cla/markdown-insert-person-command person)))))
 #+END_SRC
 
 * Web Development
