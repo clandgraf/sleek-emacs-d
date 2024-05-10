@@ -346,17 +346,6 @@ combination with emacsclient -c to open magit-status from shell.
       (magit-status)))
 #+END_SRC
 
-** Processing
-
-#+BEGIN_SRC emacs-lisp
-  (setq processing-location
-        "c:/Users/chris/processing-3.5.3/processing-java.exe")
-  (setq processing-application-dir
-        "c:/Users/chris/processing-3.5.3")
-  (setq processing-sketchbook-dir
-        "c:/Users/chris/Documents/Processing")
-#+END_SRC
-
 ** Global Utilies
 
 *** Diff HL Mode
