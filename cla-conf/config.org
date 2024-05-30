@@ -403,9 +403,20 @@ Company Box is a company frontend that supports icons
 *** Projectile
 
 #+BEGIN_SRC emacs-lisp
+  (defconst cla/projectile-svn-command
+    "fd -0 --exclude linux2-x64 . $(svn info --show-item wc-root)")
+
   (cla/install-from-elpa 'projectile)
   (projectile-global-mode)
   (setq projectile-mode-line-prefix " ")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (if (executable-find "fd")
+    (setq projectile-svn-command cla/projectile-svn-command))
+#+END_SRC
+
+#+BEGIN_SRC
   (global-set-key (kbd "C-c p f") 'projectile-find-file)
   (global-set-key (kbd "C-c p g") 'projectile-grep)
   (global-set-key (kbd "C-c p s") 'projectile-switch-project)
