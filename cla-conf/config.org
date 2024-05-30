@@ -400,15 +400,6 @@ Company Box is a company frontend that supports icons
   (company-mode . company-box-mode))
 #+END_SRC
 
-*** LSP Mode
-
-Used for:
-- Rust
-
-#+BEGIN_SRC emacs-lisp
-;(cla/install-from-elpa 'lsp-mode)
-#+END_SRC
-
 *** Projectile
 
 #+BEGIN_SRC emacs-lisp
