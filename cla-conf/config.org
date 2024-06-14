@@ -147,7 +147,7 @@ second time, after package initialization.
                       :family cla/font-family :height cla/font-height-default)
 #+END_SRC
 
-* Setup package.el + use-package
+* Setup package.el
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'package-archives
@@ -157,8 +157,6 @@ second time, after package initialization.
   (defun cla/install-from-elpa (package)
     (unless (package-installed-p package)
       (package-install package)))
-
-  (cla/install-from-elpa 'use-package)
 #+END_SRC
 
 * General setup
@@ -326,8 +324,9 @@ Stuff that doesn't need much setup
     :ensure t)
   (use-package markdown-mode
     :ensure t
-    :bind (("C-c i c" . markdown-insert-change-request)
-           ("C-c i p" . markdown-insert-person)))
+    :bind (:map markdown-mode-map
+                ("C-c i c" . markdown-insert-change-request)
+                ("C-c i p" . markdown-insert-person)))
 #+END_SRC
 
 ** Magit
@@ -365,7 +364,7 @@ Highlight modified lines of code in files under version control
 *** Smart Parens
 
 #+BEGIN_SRC emacs-lisp
-  (use-package 'smartparens
+  (use-package smartparens
     :ensure t
     :diminish smartparens-mode
     :config (progn
@@ -493,7 +492,7 @@ Finally we need Helm to interact with projectile
 
 ** Working with Change Requests
 
-#+BEGIN_SRC
+#+BEGIN_SRC emacs-lisp
 (defconst cla/markdown-insert-cr-command
   "ceget cdberror %s | jq -r '.[] | [.[\"system:description\"], .[\"system:ui_link\"]] | \"[\\(.[0])](\\(.[1]))\"'")
 
