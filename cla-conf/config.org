@@ -522,10 +522,6 @@ I think for Javascript/JSX based types I should replace this RJSX.
 
 #+BEGIN_SRC emacs-lisp
   (cla/install-from-elpa 'web-mode)
-  (cla/install-from-elpa 'rjsx-mode)
-
-  (dolist (suffix '("\\.js\\'" "\\.jsx\\'"))
-    (add-to-list 'auto-mode-alist `(,suffix . rjsx-mode)))
 
   (dolist (suffix '("\\.tsx\\'" "\\.ts\\'" "\\.json\\'" "\\.html\\'" "\\.css\\'"))
     (add-to-list 'auto-mode-alist `(,suffix . web-mode)))
@@ -539,5 +535,3 @@ Customize indentation
 #+BEGIN_SRC emacs-lisp
   (setq sgml-basic-offset 4)
 #+END_SRC
-
-TODO I should check RJSX for Typescript.
