@@ -405,31 +405,21 @@ Company Box is a company frontend that supports icons
   (defconst cla/projectile-svn-command
     "fd -0 --exclude linux2-x64 . $(svn info --show-item wc-root)")
 
-  (cla/install-from-elpa 'projectile)
-  (projectile-global-mode)
-  (setq projectile-mode-line-prefix " ")
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (if (executable-find "fd")
-    (setq projectile-svn-command cla/projectile-svn-command))
-#+END_SRC
-
-#+BEGIN_SRC
-  (global-set-key (kbd "C-c p f") 'projectile-find-file)
-  (global-set-key (kbd "C-c p g") 'projectile-grep)
-  (global-set-key (kbd "C-c p s") 'projectile-switch-project)
-  (global-set-key (kbd "C-c p k") 'projectile-kill-buffers)
-  (global-set-key (kbd "<f9>") 'projectile-switch-project)
-  (global-set-key (kbd "<f10>") 'projectile-find-file)
-#+END_SRC
-
-Let's enable native indexing/no caching, if the system has git and fd
-this should be sufficiently efficient:
-
-#+BEGIN_SRC emacs-lisp
-  (setq projectile-indexing-method 'alien)
-  (setq projectile-enable-caching nil)
+  (use-package projectile
+    :ensure t
+    :config
+    (projectile-mode)
+    (setq projectile-mode-line-prefix " ")
+    (if (executable-find "fd")
+        (setq projectile-svn-command cla/projectile-svn-command))
+    (setq projectile-indexing-method 'alien)
+    (setq projectile-enable-caching nil)
+    :bind (("C-c p f" . projectile-find-file)
+           ("C-c p g" . projectile-grep)
+           ("C-c p s" . projectile-switch-project)
+           ("C-c p k" . projectile-kill-buffers)
+           ("<f9>" . projectile-switch-project)
+           ("<f10>" . projectile-find-file)))
 #+END_SRC
 
 *** Helm
