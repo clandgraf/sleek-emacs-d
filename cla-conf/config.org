@@ -141,10 +141,9 @@ second time, after package initialization.
 ** Font Setup
 
 #+BEGIN_SRC emacs-lisp
-  (defvar cla/font-family "SauceCodePro NF")
-  (defvar cla/font-height-default 110)
   (set-face-attribute 'default nil
-                      :family cla/font-family :height cla/font-height-default)
+                      :family "SauceCodePro NF"
+                      :height 110)
 #+END_SRC
 
 * Setup package.el
@@ -362,12 +361,12 @@ combination with emacsclient -c to open magit-status from shell.
 Highlight modified lines of code in files under version control
 
 #+BEGIN_SRC emacs-lisp
-(use-package diff-hl
-  :ensure t
-  :defer 2
-  :config
-  (global-diff-hl-mode)
-  (diff-hl-margin-mode))
+  (use-package diff-hl
+    :ensure t
+    :defer 2
+    :config
+    (global-diff-hl-mode)
+    (diff-hl-margin-mode))
 #+END_SRC
 
 *** Smart Parens
