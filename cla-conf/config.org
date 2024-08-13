@@ -385,6 +385,10 @@ Highlight modified lines of code in files under version control
 *** Completion
 
 #+BEGIN_SRC emacs-lisp
+  (use-package savehist
+    :init
+    (savehist-mode))
+
   (use-package vertico
     :ensure t
     :init
@@ -403,33 +407,34 @@ Highlight modified lines of code in files under version control
     :init
     (marginalia-mode))
 
-  ; Try also corfu, consult.el
+  ; Try also corfu, consult.el, orderless
+
 #+END_SRC
 
-*** Company Mode
+# *** Company Mode
 
-Basic Company Setup
+# Basic Company Setup
 
-#+BEGIN_SRC emacs-lisp
-  (cla/install-from-elpa 'company)
-  (setq company-dabbrev-downcase nil)
-  (setq company-minimum-prefix-length 2)
-  (setq company-idle-delay 0)
-  (add-hook 'after-init-hook 'global-company-mode)
-  (with-eval-after-load 'company
-    (diminish 'company-mode))
-#+END_SRC
+# #+BEGIN_SRC emacs-lisp
+#   (cla/install-from-elpa 'company)
+#   (setq company-dabbrev-downcase nil)
+#   (setq company-minimum-prefix-length 2)
+#   (setq company-idle-delay 0)
+#   (add-hook 'after-init-hook 'global-company-mode)
+#   (with-eval-after-load 'company
+#     (diminish 'company-mode))
+# #+END_SRC
 
-Company Box is a company frontend that supports icons
+# Company Box is a company frontend that supports icons
 
-#+BEGIN_SRC emacs-lisp
-(use-package company-box
-  :ensure t
-  :config
-  (diminish 'company-box-mode)
-  :hook
-  (company-mode . company-box-mode))
-#+END_SRC
+# #+BEGIN_SRC emacs-lisp
+# (use-package company-box
+#   :ensure t
+#   :config
+#   (diminish 'company-box-mode)
+#   :hook
+#   (company-mode . company-box-mode))
+# #+END_SRC
 
 *** Smart Mode Line
 
