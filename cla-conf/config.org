@@ -382,6 +382,30 @@ Highlight modified lines of code in files under version control
               (global-set-key (kbd "C-.") 'sp-select-next-thing)))
 #+END_SRC
 
+*** Completion
+
+#+BEGIN_SRC emacs-lisp
+  (use-package vertico
+    :ensure t
+    :init
+    (vertico-mode))
+
+  (use-package vertico-directory
+    :after vertico
+    :ensure nil
+    :bind (:map vertico-map
+                ("RET" . vertico-directory-enter)
+                ("DEL" . vertico-directory-delete-char)
+                ("M-DEL" . vertico-directory-delete-word)))
+
+  (use-package marginalia
+    :ensure t
+    :init
+    (marginalia-mode))
+
+  ; Try also corfu, consult.el
+#+END_SRC
+
 *** Company Mode
 
 Basic Company Setup
@@ -405,64 +429,6 @@ Company Box is a company frontend that supports icons
   (diminish 'company-box-mode)
   :hook
   (company-mode . company-box-mode))
-#+END_SRC
-
-*** Projectile
-
-#+BEGIN_SRC emacs-lisp
-  (defconst cla/projectile-svn-command
-    "fd -0 --exclude linux2-x64 . $(svn info --show-item wc-root)")
-
-  (use-package projectile
-    :ensure t
-    :config
-    (projectile-mode)
-    (setq projectile-mode-line-prefix " ")
-    (if (executable-find "fd")
-        (setq projectile-svn-command cla/projectile-svn-command))
-    (setq projectile-indexing-method 'alien)
-    (setq projectile-enable-caching nil)
-    :bind (("C-c p f" . projectile-find-file)
-           ("C-c p g" . projectile-grep)
-           ("C-c p s" . projectile-switch-project)
-           ("C-c p k" . projectile-kill-buffers)
-           ("<f9>" . projectile-switch-project)
-           ("<f10>" . projectile-find-file)))
-#+END_SRC
-
-*** Helm
-
-#+BEGIN_SRC emacs-lisp
-  (cla/install-from-elpa 'helm)
-  ; (require 'helm-config)
-  (require 'helm)
-  (helm-mode 1)
-#+END_SRC
-
-We want our Helm Buffer to always open in the bottom part of the
-window we're in. This makes it rather predictable.
-
-#+BEGIN_SRC emacs-lisp
-  (setq helm-split-window-in-side-p t)
-  (setq helm-split-window-default-side 'below)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (with-eval-after-load "helm"
-    (global-set-key (kbd "C-x C-f") #'helm-find-files)
-    (global-set-key (kbd "M-x") #'helm-M-x)
-    (define-key helm-find-files-map "\t" 'helm-execute-persistent-action)
-    (define-key helm-read-file-map "\t" 'helm-execute-persistent-action)
-    (diminish 'helm-mode))
-#+END_SRC
-
-Finally we need Helm to interact with projectile
-
-#+BEGIN_SRC emacs-lisp
-(use-package helm-projectile
-  :ensure t
-  :config
-  (helm-projectile-on))
 #+END_SRC
 
 *** Smart Mode Line
