@@ -303,6 +303,16 @@ file or directory at point in the same buffer.
 (put 'dired-find-alternate-file 'disabled nil)
 #+END_SRC
 
+** Project.el
+
+#+BEGIN_SRC emacs-lisp
+  (setq project-switch-commands '((project-find-file "Find file" "f")
+                                  (project-find-dir "Find dir" "d")
+                                  (project-dired "Dired" "D")
+                                  (consult-ripgrep "ripgrep" "g")
+                                  (magit-project-status "Magit" "m")))
+#+END_SRC
+
 * Packages
 
 Let's ensure diminish is installed so we can use it later on.
