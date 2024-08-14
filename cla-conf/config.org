@@ -326,9 +326,10 @@ Let's ensure diminish is installed so we can use it later on.
 Stuff that doesn't need much setup
 
 #+BEGIN_SRC emacs-lisp
-  (use-package rg
-    :ensure t)
+  (use-package cedm)
   (use-package htmlize
+    :ensure t)
+  (use-package rg
     :ensure t)
   (use-package markdown-mode
     :ensure t
@@ -407,84 +408,33 @@ Highlight modified lines of code in files under version control
     :init
     (marginalia-mode))
 
-  ; Try also corfu, consult.el, orderless
+  (use-package corfu
+    :ensure t
+    :custom
+    (corfu-auto t)
+    (corfu-auto-delay 0.2)
+    (corfu-auto-prefix 2)
+    :init
+    (global-corfu-mode))
 
+  (use-package orderless
+    :ensure t
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-defaults nil)
+    (completion-category-overrides '((file (styles partial-completion)))))
+
+  ; Try also consult.el
 #+END_SRC
-
-# *** Company Mode
-
-# Basic Company Setup
-
-# #+BEGIN_SRC emacs-lisp
-#   (cla/install-from-elpa 'company)
-#   (setq company-dabbrev-downcase nil)
-#   (setq company-minimum-prefix-length 2)
-#   (setq company-idle-delay 0)
-#   (add-hook 'after-init-hook 'global-company-mode)
-#   (with-eval-after-load 'company
-#     (diminish 'company-mode))
-# #+END_SRC
-
-# Company Box is a company frontend that supports icons
-
-# #+BEGIN_SRC emacs-lisp
-# (use-package company-box
-#   :ensure t
-#   :config
-#   (diminish 'company-box-mode)
-#   :hook
-#   (company-mode . company-box-mode))
-# #+END_SRC
 
 *** Smart Mode Line
 
 #+BEGIN_SRC emacs-lisp
-  (cla/install-from-elpa 'smart-mode-line)
-  (setq sml/theme 'dark)
-  (sml/setup)
-#+END_SRC
-
-*** COMMENT Flycheck
-
-#+BEGIN_SRC emacs-lisp
-  ;; (cla/install-from-elpa 'flycheck)
-  ;; (use-package flycheck
-  ;;   :ensure t
-  ;;   :init (global-flycheck-mode))
-  ;; (setq flycheck-check-syntax-automatically '(mode-enabled save))
-  ;; (setq-default flycheck-disabled-checkers '(c/c++-gcc c/c++-clang javascript-jshint))
-  ;; (add-hook 'after-init-hook #'global-flycheck-mode)
-  ;; (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
-#+END_SRC
-
-* CEDM
-
-** Working with Change Requests
-
-#+BEGIN_SRC emacs-lisp
-(defconst cla/markdown-insert-cr-command
-  "ceget cdberror %s | jq -r '.[] | [.[\"system:description\"], .[\"system:ui_link\"]] | \"[\\(.[0])](\\(.[1]))\"'")
-
-(defun markdown-insert-change-request (cr)
-  (interactive
-   (list (read-string "Change Request ID: ")))
-  (if (not (string-match-p "^E[0-9]\\{6\\}$" cr))
-      (error "'%s' is no valid Change Reques  ID."))
-  (insert
-   (string-trim-right
-    (shell-command-to-string
-     (format cla/markdown-insert-cr-command cr)))))
-
-(defconst cla/markdown-insert-person-command
-  "ceget person %s | jq -r '.[0][\"system:description\"]'")
-
-(defun markdown-insert-person (person)
-  (interactive
-   (list (read-string "Person ID: ")))
-  (insert
-   (string-trim-right
-    (shell-command-to-string
-     (format cla/markdown-insert-person-command person)))))
+  (use-package smart-mode-line
+    :ensure t
+    :config
+    (setq sml/theme 'dark)
+    (sml/setup))
 #+END_SRC
 
 * Web Development
@@ -492,21 +442,23 @@ Highlight modified lines of code in files under version control
 Some minor major-modes (lol) for common formats
 
 #+BEGIN_SRC emacs-lisp
-  (cla/install-from-elpa 'yaml-mode)
-  (cla/install-from-elpa 'mustache-mode)
-  (require 'mustache-mode)
+  (use-package yaml-mode
+    :ensure t)
+  (use-package mustache-mode
+    :ensure t)
 #+END_SRC
 
 I think for Javascript/JSX based types I should replace this RJSX.
 
 #+BEGIN_SRC emacs-lisp
-  (cla/install-from-elpa 'web-mode)
-
-  (dolist (suffix '("\\.tsx\\'" "\\.ts\\'" "\\.json\\'" "\\.html\\'" "\\.css\\'"))
-    (add-to-list 'auto-mode-alist `(,suffix . web-mode)))
-
-  (dolist (suffix '("\\.scss\\'"))
-    (add-to-list 'auto-mode-alist `(,suffix . scss-mode)))
+  (use-package web-mode
+    :ensure t
+    :mode
+    (("\\.tsx\\'" . web-mode)
+     ("\\.ts\\'" . web-mode)
+     ("\\.json\\'" . web-mode)
+     ("\\.html\\'" . web-mode)
+     ("\\.css\\'" . web-mode)))
 #+END_SRC
 
 Customize indentation
