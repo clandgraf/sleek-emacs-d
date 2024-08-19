@@ -427,6 +427,12 @@ Highlight modified lines of code in files under version control
     :init
     (global-corfu-mode))
 
+  (use-package corfu-terminal
+    :ensure t
+    :custom
+    (setq corfu-terminal-disable-on-gui t)
+    (corfu-terminal-mode +1))
+
   (use-package orderless
     :ensure t
     :custom
@@ -465,7 +471,9 @@ Highlight modified lines of code in files under version control
 
   (use-package doom-modeline
     :ensure t
-    :init (doom-modeline-mode 1))
+    :init
+    (doom-modeline-mode 1)
+    (setq doom-modeline-buffer-file-name-style 'file-name-with-project))
 #+END_SRC
 
 * Web Development
