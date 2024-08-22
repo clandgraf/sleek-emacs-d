@@ -444,14 +444,30 @@ Highlight modified lines of code in files under version control
   (use-package consult
     :ensure t
     :bind (("C-x b" . consult-buffer)
-           ("C-x p b" . consult-project-buffer)))
+           ("C-x p b" . consult-project-buffer)
+           ("M-s g" . consult-ripgrep)))
 #+END_SRC
 
-*** eglot
+*** IDE-like things, eglot, apheleia, etc
 
 #+BEGIN_SRC emacs-lisp
   (add-hook 'python-ts-mode-hook 'eglot-ensure)
+
+  (use-package dap-mode
+    :ensure t
+    :config
+    (require 'dap-python)
+    (setq dap-python-debugger 'debugpy))
 #+END_SRC
+
+This does autoformatting automatically on save using external tools
+
+#+BEGIN_SRC emacs-lisp
+  (use-package apheleia
+    :ensure t
+    (apheleia-global-mode +1))
+#+END_SRC
+
 
 *** Smart Mode Line
 
