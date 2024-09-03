@@ -348,7 +348,9 @@ Stuff that doesn't need much setup
                 ("C-c i p" . cedm-md-insert-person)))
 #+END_SRC
 
-** Magit
+** Version Control
+
+*** Magit
 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
@@ -365,8 +367,6 @@ combination with emacsclient -c to open magit-status from shell.
       (magit-status)))
 #+END_SRC
 
-** Global Utilies
-
 *** Diff HL Mode
 
 Highlight modified lines of code in files under version control
@@ -378,6 +378,21 @@ Highlight modified lines of code in files under version control
     :config
     (global-diff-hl-mode)
     (diff-hl-margin-mode))
+#+END_SRC
+
+** Global Utilies
+
+*** Doom Mode Line
+
+#+BEGIN_SRC emacs-lisp
+  (use-package nerd-icons
+    :ensure t)
+
+  (use-package doom-modeline
+    :ensure t
+    :init
+    (doom-modeline-mode 1)
+    (setq doom-modeline-buffer-file-name-style 'file-name-with-project))
 #+END_SRC
 
 *** Smart Parens
@@ -467,17 +482,6 @@ This does autoformatting automatically on save using external tools
     :ensure t
     (apheleia-global-mode +1))
 #+END_SRC
-
-
-*** Smart Mode Line
-
-# #+BEGIN_SRC emacs-lisp
-#   (use-package smart-mode-line
-#     :ensure t
-#     :config
-#     (setq sml/theme 'dark)
-#     (sml/setup))
-# #+END_SRC
 
 *** Doom Mode Line
 
