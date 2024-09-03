@@ -344,8 +344,8 @@ Stuff that doesn't need much setup
   (use-package markdown-mode
     :ensure t
     :bind (:map markdown-mode-map
-                ("C-c i c" . markdown-insert-change-request)
-                ("C-c i p" . markdown-insert-person)))
+                ("C-c i c" . cedm-md-insert-change-request)
+                ("C-c i p" . cedm-md-insert-person)))
 #+END_SRC
 
 ** Magit
