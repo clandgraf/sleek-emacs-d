@@ -480,6 +480,7 @@ This does autoformatting automatically on save using external tools
 #+BEGIN_SRC emacs-lisp
   (use-package apheleia
     :ensure t
+    :init
     (apheleia-global-mode +1))
 #+END_SRC
 
