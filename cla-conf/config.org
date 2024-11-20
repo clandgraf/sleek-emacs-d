@@ -322,6 +322,13 @@ file or directory at point in the same buffer.
                                   (magit-project-status "Magit" "m")))
 #+END_SRC
 
+* macOS-specific stuff
+
+#+BEGIN_SRC emacs-lisp
+(setq ns-alternate-modifier 'meta)
+(setq ns-right-alternate-modifier 'none)
+#+END_SRC
+
 * Packages
 
 Let's ensure diminish is installed so we can use it later on.
