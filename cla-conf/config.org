@@ -294,6 +294,15 @@ Global minor mode that is toggled when we switch frames?
   (global-set-key (kbd "C-S-<f3>") 'rg-project)
 #+END_SRC
 
+** Org-Mode
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c c") #'org-capture)
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file+headline "~/OneDrive/todo/todo.org" "Tasks")
+         "* TODO %?\n  %i\n  %a")))
+#+END_SRC
+
 ** Dired
 
 This enables the 'a' key in dired, which can be used to open the
