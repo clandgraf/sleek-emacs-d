@@ -324,8 +324,14 @@ file or directory at point in the same buffer.
 
 * macOS-specific stuff
 
+On macOS by default option will be handled by the operating system. On
+the one hand, option is used to input special characters, on the other
+hand, it's a good option for inputting meta.
+
+Let's try to switch muscle memory and use ESC as meta key.
+
 #+BEGIN_SRC emacs-lisp
-(setq ns-alternate-modifier 'meta)
+(setq ns-alternate-modifier 'none)
 (setq ns-right-alternate-modifier 'none)
 #+END_SRC
 
