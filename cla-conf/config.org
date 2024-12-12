@@ -211,6 +211,10 @@ Disable emacs to auto-create files when editing
 
 ** Keychords
 
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c e") 'insert-char)
+#+END_SRC
+
 windmove is bound to meta, so we can move between adjacent
 windows using Alt+Arrow Keys, instead of C-x o. Note that this
 collides with default org-mode keys, so first unbind those.
@@ -469,6 +473,12 @@ Highlight modified lines of code in files under version control
     :custom
     (setq corfu-terminal-disable-on-gui t)
     (corfu-terminal-mode +1))
+
+  (use-package cape
+    :init
+    (add-hook 'completion-at-point-functions #'cape-dabbrev)
+    (add-hook 'completion-at-point-functions #'cape-file)
+    (add-hook 'completion-at-point-functions #'cape-elisp-block))
 
   (use-package orderless
     :ensure t
