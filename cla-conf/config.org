@@ -332,11 +332,10 @@ On macOS by default option will be handled by the operating system. On
 the one hand, option is used to input special characters, on the other
 hand, it's a good option for inputting meta.
 
-Let's try to switch muscle memory and use ESC as meta key.
-
 #+BEGIN_SRC emacs-lisp
-(setq ns-alternate-modifier 'none)
-(setq ns-right-alternate-modifier 'none)
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier 'none)
+(setq mac-right-option-modifier 'none)
 #+END_SRC
 
 * Packages
