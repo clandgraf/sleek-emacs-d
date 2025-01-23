@@ -306,6 +306,38 @@ Global minor mode that is toggled when we switch frames?
         '(("t" "Todo" entry (file+headline "~/OneDrive/todo/todo.org" "Tasks")
          "* TODO %?\n  %i\n  %a")))
 #+END_SRC
+Custom Figures for my journal entries
+
+#+begin_src emacs-lisp
+  (defun cla/encode-image-b64 (source)
+    (format "data:image/%s;base64,%s"
+            (or (file-name-extension source) "")
+            (base64-encode-string
+             (with-temp-buffer
+               (insert-file-contents-literally source)
+               (buffer-string)))
+            (file-name-nondirectory source)))
+
+  (use-package org-special-block-extras
+    :ensure t
+    :hook (org-mode . org-special-block-extras-mode)
+    :config
+
+    (org-defblock myfigure
+      (caption nil)
+      "Custom environment for HTML figures"
+      (let* ((images (split-string raw-contents))
+             (embed nil))
+        (shr-dom-to-xml
+         `(figure ()
+                  (div ()
+                       ,@(--map `(img ((src . ,(if embed
+                                                   (cla/encode-image-b64 it)
+                                                 it))))
+                                images))
+                  ,(if caption `(figcaption ()
+                                            ,caption)))))))
+#+end_src
 
 ** Dired
 
@@ -474,6 +506,7 @@ Highlight modified lines of code in files under version control
     (corfu-terminal-mode +1))
 
   (use-package cape
+    :ensure t
     :init
     (add-hook 'completion-at-point-functions #'cape-dabbrev)
     (add-hook 'completion-at-point-functions #'cape-file)
