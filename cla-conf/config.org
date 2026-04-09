@@ -297,10 +297,15 @@ Global minor mode that is toggled when we switch frames?
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c c") #'org-capture)
-  (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "~/OneDrive/todo/todo.org" "Tasks")
-         "* TODO %?\n  %i\n  %a")))
+  ;(setq org-capture-templates
+  ;      '(("t" "Todo" entry (file+headline "~/OneDrive/todo/todo.org" "Tasks")
+  ;       "* TODO %?\n  %i\n  %a")))
+  (setq org-agenda-include-diary t)
+  (setq calendar-date-style 'iso)
+  (setq diary-file "~/ownCloud/Documents/emacs-diary")
+  (push "~/ownCloud/Documents/orga/agenda.org" org-agenda-files)
 #+END_SRC
+
 Custom Figures for my journal entries
 
 #+begin_src emacs-lisp
