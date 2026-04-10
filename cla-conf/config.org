@@ -89,7 +89,7 @@ Initial Frame size is a bit small for modern screens
 #+BEGIN_SRC emacs-lisp
   (setq default-frame-alist
     '((width . 120)
-      (height . 50)))
+      (height . 40)))
 #+END_SRC
 
 Remove all those noobish frame decorations. First two are only
