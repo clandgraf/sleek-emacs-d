@@ -139,10 +139,6 @@ On TTYs we want a nice vertical border:
   (add-to-list 'package-archives
     '("melpa" . "http://melpa.org/packages/") t)
   (package-refresh-contents)
-
-  (defun cla/install-from-elpa (package)
-    (unless (package-installed-p package)
-      (package-install package)))
 #+END_SRC
 
 * General setup
