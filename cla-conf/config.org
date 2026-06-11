@@ -393,21 +393,36 @@ Let's ensure diminish is installed so we can use it later on.
     (global-treesit-auto-mode))
 #+END_SRC
 
+** Hydra
+
+#+BEGIN_SRC emacs-lisp
+  (use-package hydra
+    :ensure t)
+  (use-package cedm)
+
+  (defhydra hydra-insert-cedm ()
+    "Insert CEDM Entities"
+    ("c" cedm-insert-change-request "Change Request")
+    ("p" cedm-md-insert-person "Person"))
+#+END_SRC
+
 ** Random Stuff
 
 Stuff that doesn't need much setup
 
 #+BEGIN_SRC emacs-lisp
-  (use-package cedm)
   (use-package htmlize
     :ensure t)
   (use-package rg
     :ensure t)
   (use-package markdown-mode
     :ensure t
+    :after (hydra cedm)
     :bind (:map markdown-mode-map
-                ("C-c i c" . cedm-md-insert-change-request)
-                ("C-c i p" . cedm-md-insert-person)))
+                ("C-c i" . hydra-insert-cedm/body)))
+  (use-package org-mode
+    :bind (:map org-mode-map
+                ("C-c i" . hydra-insert-cedm/body)))
 #+END_SRC
 
 ** Version Control
