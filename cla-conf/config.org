@@ -118,25 +118,11 @@ On TTYs we want a nice vertical border:
 ** Theme Setup I
 
 #+BEGIN_SRC emacs-lisp
-  (defconst cla/the-theme-pkg
-    'dracula-theme)
-  (defconst cla/the-theme
-    'dracula)
+  (use-package dracula-theme
+    :ensure t
+    :config
+    (load-theme 'dracula))
 #+END_SRC
-
-... let's load up our theme if it exists. Otherwise
-we would have to wait for package initialization to
-complete while staring at a white window -.-
-
-#+BEGIN_SRC emacs-lisp
-  (ignore-errors
-    (require 'package)
-    (package-initialize)
-    (load-theme cla/the-theme))
-#+END_SRC
-
-However if we don't have it installed yet, we try a
-second time, after package initialization.
 
 ** Font Setup
 
@@ -171,12 +157,6 @@ second time, after package initialization.
     (exec-path-from-shell-initialize)))
 #+END_SRC
 
-** Theme Setup II
-
-#+BEGIN_SRC emacs-lisp
-  (unless (package-installed-p cla/the-theme-pkg)
-    (package-install cla/the-theme-pkg)
-    (load-theme cla/the-theme))
 #+END_SRC
 
 ** Sane Code Formatting
