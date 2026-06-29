@@ -515,18 +515,23 @@ Highlight modified lines of code in files under version control
     (completion-category-defaults nil)
     (completion-category-overrides '((file (styles partial-completion)))))
 
+  (defhydra hydra-consult-ripgrep ()
+    "consult-ripgrep variants"
+    ("g" consult-ripgrep "Consult Ripgrep in current project")
+    ("." consult-ripgrep-at-point "Consult Ripgrep at point"))
+
   ; Try also consult.el
   (use-package consult
     :ensure t
     :bind (("C-x b" . consult-buffer)
            ("C-x p b" . consult-project-buffer)
-           ("M-s g" . consult-ripgrep))
+           ("M-s g" . consult-ripgrep)
+           ("C-<f3>" . consult-ripgrep-at-point))
     :config
     (defun consult-ripgrep-at-point ()
       (interactive)
       (consult-ripgrep (consult--project-root)
-                       (format "#%s" (symbol-at-point))))
-    (global-set-key (kbd "C-<f3>") 'consult-ripgrep-at-point))
+                       (format "#%s" (symbol-at-point)))))
 #+END_SRC
 
 *** IDE-like things, eglot, apheleia, etc
