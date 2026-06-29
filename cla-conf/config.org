@@ -118,10 +118,10 @@ On TTYs we want a nice vertical border:
 ** Theme Setup I
 
 #+BEGIN_SRC emacs-lisp
-  (use-package dracula-theme
+  (use-package batppuccin
     :ensure t
     :config
-    (load-theme 'dracula))
+    (load-theme 'batppuccin-frappe t))
 #+END_SRC
 
 ** Font Setup
