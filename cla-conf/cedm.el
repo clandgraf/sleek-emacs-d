@@ -51,4 +51,10 @@
    (list (read-string "Person ID: ")))
   (cedm--insert-detail-link "person" person))
 
+(defun cedm-insert-object (rest_name id)
+  (interactive
+   (list (read-string "Rest Name: ")
+         (read-string "ID: ")))
+  (cedm--insert-detail-link rest_name id))
+
 (provide 'cedm)

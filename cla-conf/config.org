@@ -379,7 +379,8 @@ Let's ensure diminish is installed so we can use it later on.
   (defhydra hydra-insert-cedm ()
     "Insert CEDM Entities"
     ("c" cedm-insert-change-request "Change Request")
-    ("p" cedm-md-insert-person "Person"))
+    ("p" cedm-md-insert-person "Person")
+    ("o" cedm-insert-object "Object"))
 #+END_SRC
 
 ** Random Stuff
