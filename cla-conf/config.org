@@ -146,13 +146,15 @@ On TTYs we want a nice vertical border:
 ** Daemon Setup
 
 #+BEGIN_SRC emacs-lisp
-(use-package exec-path-from-shell
-  :ensure t
-  :config
-  (when (daemonp)
-    (exec-path-from-shell-initialize)))
-#+END_SRC
+  (global-set-key (kbd "<f9>") #'backward-sexp)
+  (global-set-key (kbd "<f10>") #'forward-sexp)
+  (global-set-key (kbd "S-<f10>") #'mark-sexp)
 
+  (use-package exec-path-from-shell
+    :ensure t
+    :config
+    (when (daemonp)
+      (exec-path-from-shell-initialize)))
 #+END_SRC
 
 ** Sane Code Formatting
@@ -526,7 +528,7 @@ Highlight modified lines of code in files under version control
     :ensure t
     :bind (("C-x b" . consult-buffer)
            ("C-x p b" . consult-project-buffer)
-           ("M-s g" . consult-ripgrep)
+           ("M-s g" . hydra-consult-ripgrep/body)
            ("C-<f3>" . consult-ripgrep-at-point))
     :config
     (defun consult-ripgrep-at-point ()
